@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/shader"/>
+    <qresource prefix="/">
+        <file>triangle.vert</file>
+        <file>triangle.frag</file>
+        <file>colors.vert</file>
+        <file>colors.frag</file>
+        <file>lamp.vert</file>
+        <file>lamp.frag</file>
+        <file>rgb2yuv422.frag</file>
+        <file>basic_lighting.vert</file>
+        <file>basic_lighting.frag</file>
+    </qresource>
+</RCC>
