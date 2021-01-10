@@ -81,7 +81,7 @@ void CustomCamera::processKeyboard(Camera_Movement action, float deltaTime) {
     m_position -= m_right * velocity;
     break;
   case UP:
-    m_position += world_up * velocity;
+    m_position += m_up * velocity;
     break;
   case DOWN:
     m_position -= m_up * velocity;
