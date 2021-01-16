@@ -173,15 +173,21 @@ void CustomOpenglWidget::paintGL() {
     m_projection.perspective(m_camera->zoom,1.0f *width() / height(),0.1f,100.0f);
     m_colorProgram.setUniformValue("a_projection",m_projection);
     QMatrix4x4 m_view = m_camera->getViewMatrix();
-    m_colorProgram.setUniformValue("a_view",m_view);
+    m_colorProgram.setUniformValue("a_view", m_view);
     m_colorProgram.setUniformValue("lampColor",QVector3D(1.0f, 0.5f, 0.31f));
     m_colorProgram.setUniformValue("objColor",QVector3D(1.0f, 1.0f, 1.0f));
     m_colorProgram.setUniformValue("viewPosition",QVector3D(0.0f,0.0f,3.0f));
     m_colorProgram.setUniformValue("light.direction",QVector3D(-0.2f, -1.0f, -0.3f));
-    m_colorProgram.setUniformValue("mateliar.shininess",64.0f);
+    m_colorProgram.setUniformValue("mateliar.shininess", 64.0f);
+    m_colorProgram.setUniformValue("light.position", lightPos);
     m_colorProgram.setUniformValue("light.ambient", QVector3D(0.2f, 0.2f, 0.2f));
     m_colorProgram.setUniformValue("light.diffuse", QVector3D(0.5f, 0.5f, 0.5f));
     m_colorProgram.setUniformValue("light.specular", QVector3D(1.0f, 1.0f, 1.0f));
+    m_colorProgram.setUniformValue("light.constant", 1.0f);
+    m_colorProgram.setUniformValue("light.linear", 0.09f);
+    m_colorProgram.setUniformValue("light.quadratic", 0.032f);
+
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,m_texture1);
     glActiveTexture(GL_TEXTURE1);

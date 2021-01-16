@@ -16,8 +16,10 @@ void startCamera() {
   QQuickItem *rootObject = m_mainWindow->rootObject();
   VideoContainer *container =
       rootObject->findChild<VideoContainer *>("videoContainer");
-  assert(container != nullptr);
-  container->startCamera();
+//  assert(container != nullptr);
+  if(container != nullptr){
+      container->startCamera();
+  }
 }
 
 void registerQMLType() {
@@ -52,7 +54,7 @@ int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
   registerQMLType();
   initGLSurface();
-  m_mainWindow = new QQuickView;
+//  m_mainWindow = new QQuickView;
 //  showWindow(app);
   widget = new CustomOpenglWidget();
   widget->setWindowTitle(QObject::tr("CustomGLWidget"));

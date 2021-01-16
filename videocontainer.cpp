@@ -36,10 +36,14 @@ void VideoContainer::load(){
 void VideoContainer::startCamera(bool autoLoad){
     QCamera *p_camera = qvariant_cast<QCamera*>(m_qmlCamera->property("mediaObject"));
     assert(p_camera != nullptr);
-    p_camera->start();
-    if(autoLoad){
-        load();
+    if(p_camera->isAvailable()){
+        p_camera->start();
+        if(autoLoad){
+            load();
+        }
     }
+
+
 }
 
 void VideoContainer::stopCamera(){

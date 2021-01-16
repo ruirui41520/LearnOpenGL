@@ -38,7 +38,6 @@ void CustomCamera::processMouseScroll(float offset) {
 void CustomCamera::processMouseMovement(float xOffset, float yOffset) {
   xOffset *= m_sensitive;
   yOffset *= m_sensitive;
-  qWarning()<<"updateCameraVectors " <<yOffset <<"xOffset " << xOffset;
   m_yaw += xOffset;
   m_spitch += yOffset;
   if (m_spitch > 89.0f) {

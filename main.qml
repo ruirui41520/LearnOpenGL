@@ -10,37 +10,17 @@ Item {
     height: 420
     visible: true
 
-    Camera {
-        id:camera
-        objectName: "camera"
-        captureMode: Camera.CaptureVideo
-        viewfinder {
-            resolution: Qt.size(1280 ,720 )
+    Loader{
+        id:cameraLoader
+        sourceComponent: QtMultimedia.availableCameras.length <= 0 ? cameraComponent : undefined
+    }
+
+    Component{
+        id:cameraComponent
+        CameraCaptureContainer{
+            id:cameraContainer
+            theID: "dfadfa"
         }
-    }
-
-    RenderFrameProvider {
-        objectName: "provider"
-        id: provider
-    }
-
-    VideoOutput {
-        id:viewfinder
-        objectName: "videoOutput"
-        x: 10
-        y: 15
-        width: 500
-        height: 400
-        source: provider
-        autoOrientation: true
-        fillMode: VideoOutput.PreserveAspectCrop
-    }
-
-    VideoContainer {
-        id: container
-        objectName: "videoContainer"
-        provider: provider
-        qmlCamera: camera
     }
 
 }
