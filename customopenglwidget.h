@@ -2,13 +2,13 @@
 #define CUSTOMOPENGLWIDGET_H
 
 #include <QOpenGLWidget>
-#include <QOpenGLExtraFunctions>
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLShader>
 #include <QOpenGLShaderProgram>
 #include <QMouseEvent>
 #include <QTimer>
 #include "customcamera.h"
+#include "model.h"
 
 
 class CustomOpenglWidget: public QOpenGLWidget,protected QOpenGLFunctions_3_3_Core
@@ -34,14 +34,12 @@ private:
     void glError(QString content);
 
 private:
-    QOpenGLShaderProgram m_colorProgram, m_lampProgram;
+    QOpenGLShaderProgram m_Program;
     QTimer* m_timer;
-    float m_vertex_offset = 0.0f;
-    int m_rotate;
-    GLuint m_vertex_cube_obj, m_vertex_lamp_obj,m_vertex_buffer_obj, m_element_buffer_obj, m_texture1, m_texture2;
     bool m_leftPressed = false;
     QPoint m_lastPosition;
     std::unique_ptr<CustomCamera> m_camera;
+    Model* local_model;
     // QWidget interface
 protected:
 

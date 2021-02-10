@@ -17,6 +17,8 @@ SOURCES += \
         customopenglwidget.cpp \
         dispatcher.cpp \
         main.cpp \
+        mash.cpp \
+        model.cpp \
         renderframeprovider.cpp \
         shadertransferutil.cpp \
         videocontainer.cpp
@@ -42,6 +44,15 @@ HEADERS += \
     customcamera.h \
     customopenglwidget.h \
     dispatcher.h \
+    mash.h \
+    model.h \
     renderframeprovider.h \
     shadertransferutil.h \
     videocontainer.h
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/lib/release/ -lassimp.5.0.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/lib/debug/ -lassimp.5.0.0
+else:unix: LIBS += -L$$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/lib/ -lassimp.5.0.0
+
+INCLUDEPATH += $$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/include
+DEPENDPATH += $$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/include
