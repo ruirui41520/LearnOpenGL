@@ -10,22 +10,22 @@
 #include <QOpenGLBuffer>
 #include <QScopedPointer>
 #include <QThread>
+#include <QOpenGLFunctions>
 
 class Model
 {
 public:
-    Model(QString path, QOpenGLFunctions_3_3_Core* glFunctions);
+    Model(QString path);
     void draw(QOpenGLShaderProgram *shader);
 
 private:
     QVector<Mash> m_meshes;
     QString directory;
-    QVector<Texture> texture_loaded;
-    QOpenGLFunctions_3_3_Core* m_functions;
+    std::vector<Texture> texture_loaded;
     void loadModel(QString path);
     void processNode(aiNode *node,const aiScene *scene);
     Mash processMash(aiMesh *mesh,const aiScene *scene);
-    QVector<Texture> loadMaterialTextures(aiMaterial *mat,aiTextureType type,QString typeName);
+    std::vector<Texture> loadMaterialTextures(aiMaterial *mat,aiTextureType type,QString typeName);
     GLuint TextureFromFile(const char *path, const QString &directory, bool gamma=false);
 
 };

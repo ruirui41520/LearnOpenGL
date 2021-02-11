@@ -4,18 +4,23 @@
 #include <QVector2D>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLFunctions>
+#include <QImage>
 using namespace std;
 
 struct Vertex{
     QVector3D Position;
     QVector3D Normal;
     QVector2D TexCoords;
+//    // u向量
+//    QVector3D Tangent;
+//    // v向量
+//    QVector3D Bitangent;
 };
 
 struct Texture{
     GLuint id;
     QString type;
-    QString path;
+    std::string path;
 };
 
 class Mash
@@ -23,9 +28,9 @@ class Mash
 public:
     QVector<Vertex> vertices;
     QVector<unsigned int> indices;
-    QVector<Texture> textures;
-
-    Mash(QVector<Vertex> vertices, QVector<unsigned int>indices, QVector<Texture> textures);
+    std::vector<Texture> textures;
+    GLuint textureId;
+    Mash(QVector<Vertex> vertices, QVector<unsigned int>indices, std::vector<Texture> textures);
 
     void draw(QOpenGLShaderProgram *shader);
 

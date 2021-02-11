@@ -29,13 +29,15 @@ protected:
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
+private slots:
+    void slotTimeout();
 
 private:
     void glError(QString content);
 
 private:
     QOpenGLShaderProgram m_Program;
-    QTimer* m_timer;
+    QTimer *m_timer;
     bool m_leftPressed = false;
     QPoint m_lastPosition;
     std::unique_ptr<CustomCamera> m_camera;
