@@ -124,7 +124,7 @@ void CustomOpenglWidget::initializeGL() {
     }
     {
         glBindVertexArray(m_vertex_lamp_obj);
-        glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,6*sizeof (GL_FLOAT),(void*)0);
+        glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,8*sizeof (GL_FLOAT),(void*)0);
         glEnableVertexAttribArray(0);
     }
     glGenTextures(1,&m_texture1);
