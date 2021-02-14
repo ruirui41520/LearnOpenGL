@@ -4,7 +4,7 @@
 
 Model::Model(QString path) { loadModel(path); }
 
-void Model::draw(QOpenGLShaderProgram *shader) {
+void Model::draw(Shader *shader) {
   for (int i = 0; i < m_meshes.size(); i++) {
     m_meshes[i].draw(shader);
   }

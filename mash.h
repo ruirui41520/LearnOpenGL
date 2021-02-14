@@ -5,6 +5,7 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLFunctions>
 #include <QImage>
+#include "shader.h"
 using namespace std;
 
 struct Vertex{
@@ -32,7 +33,7 @@ public:
     GLuint textureId;
     Mash(QVector<Vertex> vertices, QVector<unsigned int>indices, std::vector<Texture> textures);
 
-    void draw(QOpenGLShaderProgram *shader);
+    void draw(Shader *shader);
 
 private:
     GLuint VAO,VBO,EBO;

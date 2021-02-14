@@ -11,12 +11,13 @@
 #include <QScopedPointer>
 #include <QThread>
 #include <QOpenGLFunctions>
+#include "shader.h"
 
 class Model
 {
 public:
     Model(QString path);
-    void draw(QOpenGLShaderProgram *shader);
+    void draw(Shader *shader);
 
 private:
     QVector<Mash> m_meshes;

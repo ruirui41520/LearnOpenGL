@@ -9,7 +9,8 @@
 #include <QTimer>
 #include "customcamera.h"
 #include "model.h"
-
+#include "shader.h"
+#include <QString>
 
 class CustomOpenglWidget: public QOpenGLWidget,protected QOpenGLFunctions_3_3_Core
 {
@@ -36,7 +37,7 @@ private:
     void glError(QString content);
 
 private:
-    QOpenGLShaderProgram m_Program;
+    Shader *m_shader;
     QTimer *m_timer;
     bool m_leftPressed = false;
     QPoint m_lastPosition;

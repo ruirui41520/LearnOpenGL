@@ -20,6 +20,7 @@ SOURCES += \
         mash.cpp \
         model.cpp \
         renderframeprovider.cpp \
+        shader.cpp \
         shadertransferutil.cpp \
         videocontainer.cpp
 
@@ -47,6 +48,7 @@ HEADERS += \
     mash.h \
     model.h \
     renderframeprovider.h \
+    shader.h \
     shadertransferutil.h \
     videocontainer.h
 

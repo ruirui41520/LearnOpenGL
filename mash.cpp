@@ -8,7 +8,7 @@ Mash::Mash(QVector<Vertex> vertices, QVector<unsigned int> indices,
   setupMash();
 }
 
-void Mash::draw(QOpenGLShaderProgram *shader) {
+void Mash::draw(Shader *shader) {
   unsigned int diffuseNr = 1;
   unsigned int specularNr = 1;
   for (uint i = 0; i < textures.size(); i++) {
@@ -20,7 +20,7 @@ void Mash::draw(QOpenGLShaderProgram *shader) {
     }else if (name == "texture_specular") {
          number = QString::number(specularNr++);
        }
-    glUniform1i(shader->uniformLocation((name + number).toStdString().c_str()), i);
+    glUniform1i(shader->uniformPosition((name + number).toStdString().c_str()), i);
     glBindTexture(GL_TEXTURE_2D, textures[i].id);
   }
   glBindVertexArray(VAO);

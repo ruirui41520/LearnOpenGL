@@ -20,19 +20,7 @@ CustomOpenglWidget::~CustomOpenglWidget() {}
 void CustomOpenglWidget::initializeGL() {
     this->initializeOpenGLFunctions();
     local_model = new Model(path);
-    bool success = m_Program.addCacheableShaderFromSourceFile(
-                QOpenGLShader::Vertex, ":/basic_lighting.vert");
-    if (!success) {
-        glError("addCacheableShaderFromSourceVertex");
-        return;
-    }
-    success = m_Program.addCacheableShaderFromSourceFile(QOpenGLShader::Fragment,
-                                                         ":/basic_lighting.frag");
-    if (!success) {
-        glError("addCacheableShaderFromSourceFragment");
-        return;
-    }
-    m_Program.link();
+    m_shader = new Shader(":/basic_lighting.vert",":/basic_lighting.frag");
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -43,17 +31,17 @@ void CustomOpenglWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_camera->processInput(1.0f);
     //顺序：缩/转/移 -》 matrix_translate * matrix_rotate * matrix_scale
-    m_Program.bind();
+    m_shader->bind();
     QMatrix4x4 m_projection;
     m_projection.perspective(m_camera->zoom, 1.0f * width() / height(), 0.1f,
                              100.0f);
-    m_Program.setUniformValue("a_projection", m_projection);
+    m_shader->setMat4("a_projection", m_projection);
     QMatrix4x4 m_view = m_camera->getViewMatrix();
-    m_Program.setUniformValue("a_view", m_view);
+    m_shader->setMat4("a_view", m_view);
     QMatrix4x4 m_model;
-    m_Program.setUniformValue("a_model", m_model);
-    local_model->draw(&m_Program);
-    m_Program.release();
+    m_shader->setMat4("a_model", m_model);
+    local_model->draw(m_shader);
+    m_shader->release();
 }
 
 void CustomOpenglWidget::mousePressEvent(QMouseEvent *event) {
