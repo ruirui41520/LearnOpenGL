@@ -33,7 +33,6 @@ void CustomOpenglWidget::initializeGL() {
 void CustomOpenglWidget::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
 
 void CustomOpenglWidget::paintGL() {
-    qWarning()<<"****paintGL****";
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     m_camera->processInput(1.0f);
@@ -81,7 +80,6 @@ void CustomOpenglWidget::paintGL() {
     glStencilMask(0xFF);
     glStencilFunc(GL_ALWAYS, 0, 0xFF);
     glEnable(GL_DEPTH_TEST);
-    qWarning()<<"****test****";
 }
 
 void CustomOpenglWidget::mousePressEvent(QMouseEvent *event) {
