@@ -12,13 +12,18 @@ CONFIG += c++11
 
 SOURCES += \
         abstractframeprovider.cpp \
+        basemodel.cpp \
         camerasurface.cpp \
+        cubemesh.cpp \
+        cubemodel.cpp \
         customcamera.cpp \
         customopenglwidget.cpp \
         dispatcher.cpp \
         main.cpp \
         mash.cpp \
         model.cpp \
+        planemesh.cpp \
+        planemodel.cpp \
         renderframeprovider.cpp \
         shader.cpp \
         shadertransferutil.cpp \
@@ -41,12 +46,18 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     abstractframeprovider.h \
+    basemesh.h \
+    basemodel.h \
     camerasurface.h \
+    cubemesh.h \
+    cubemodel.h \
     customcamera.h \
     customopenglwidget.h \
     dispatcher.h \
     mash.h \
     model.h \
+    planemesh.h \
+    planemodel.h \
     renderframeprovider.h \
     shader.h \
     shadertransferutil.h \

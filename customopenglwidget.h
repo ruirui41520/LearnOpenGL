@@ -1,16 +1,17 @@
 #ifndef CUSTOMOPENGLWIDGET_H
 #define CUSTOMOPENGLWIDGET_H
-
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLShader>
 #include <QOpenGLShaderProgram>
 #include <QMouseEvent>
 #include <QTimer>
-#include "customcamera.h"
-#include "model.h"
-#include "shader.h"
 #include <QString>
+#include "customcamera.h"
+#include "basemodel.h"
+#include "cubemodel.h"
+#include "planemodel.h"
+#include "shader.h"
 
 class CustomOpenglWidget: public QOpenGLWidget,protected QOpenGLFunctions_3_3_Core
 {
@@ -30,20 +31,19 @@ protected:
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
-private slots:
-    void slotTimeout();
-
 private:
     void glError(QString content);
 
 private:
     Shader *m_shader;
     Shader *m_colorShader;
-    QTimer *m_timer;
     bool m_leftPressed = false;
     QPoint m_lastPosition;
     std::unique_ptr<CustomCamera> m_camera;
-    Model* local_model;
+    CubeModel* cube_model;
+    PlaneModel* plane_model;
+    QTimer *m_timer;
+
     // QWidget interface
 protected:
 
