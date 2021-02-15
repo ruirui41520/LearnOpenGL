@@ -38,6 +38,7 @@ private:
 
 private:
     Shader *m_shader;
+    Shader *m_colorShader;
     QTimer *m_timer;
     bool m_leftPressed = false;
     QPoint m_lastPosition;

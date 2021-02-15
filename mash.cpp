@@ -20,7 +20,7 @@ void Mash::draw(Shader *shader) {
     }else if (name == "texture_specular") {
          number = QString::number(specularNr++);
        }
-    glUniform1i(shader->uniformPosition((name + number).toStdString().c_str()), i);
+    shader->setInt((name + number).toStdString().c_str(),i);
     glBindTexture(GL_TEXTURE_2D, textures[i].id);
   }
   glBindVertexArray(VAO);

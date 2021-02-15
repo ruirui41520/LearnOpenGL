@@ -34,7 +34,6 @@ public:
     Mash(QVector<Vertex> vertices, QVector<unsigned int>indices, std::vector<Texture> textures);
 
     void draw(Shader *shader);
-
 private:
     GLuint VAO,VBO,EBO;
 

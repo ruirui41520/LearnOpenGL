@@ -10,5 +10,7 @@
         <file>rgb2yuv422.frag</file>
         <file>basic_lighting.vert</file>
         <file>basic_lighting.frag</file>
+        <file>stencil.vert</file>
+        <file>stencil.frag</file>
     </qresource>
 </RCC>
