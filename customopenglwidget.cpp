@@ -19,15 +19,10 @@ CustomOpenglWidget::~CustomOpenglWidget() {}
 
 void CustomOpenglWidget::initializeGL() {
     this->initializeOpenGLFunctions();
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-    glEnable(GL_STENCIL_TEST);
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     m_shader = new Shader(":/basic_lighting.vert", ":/basic_lighting.frag");
-    m_colorShader = new Shader(":/stencil.vert", ":/stencil.frag");
     cube_model->bindData(m_shader);
     plane_model->bindData(m_shader);
+    glEnable(GL_DEPTH_TEST);
 }
 
 void CustomOpenglWidget::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
@@ -44,42 +39,17 @@ void CustomOpenglWidget::paintGL() {
     m_shader->setMat4("a_projection", m_projection);
     QMatrix4x4 m_view = m_camera->getViewMatrix();
     m_shader->setMat4("a_view", m_view);
-
-    glStencilMask(0x00);
     plane_model->draw(m_shader);
 
     QMatrix4x4 m_model;
     m_model.translate(QVector3D(-1.0f, 0.0f, -1.0f));
     m_shader->setMat4("a_model", m_model);
-    glStencilFunc(GL_ALWAYS, 1, 0xFF);
-    glStencilMask(0xFF);
     cube_model->draw(m_shader);
     m_model = QMatrix4x4();
     m_model.translate(QVector3D(2.0f, 0.0f, 0.0f));
     m_shader->setMat4("a_model", m_model);
     cube_model->draw(m_shader);
     m_shader->release();
-
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    glStencilMask(0x00);
-    glDisable(GL_DEPTH_TEST);
-    m_colorShader->bind();
-    m_colorShader->setMat4("a_projection", m_projection);
-    m_colorShader->setMat4("a_view", m_view);
-    m_model = QMatrix4x4();
-    m_model.translate(QVector3D(-1.0f, 0.0f, -1.0f));
-    m_model.scale(QVector3D(1.1, 1.1, 1.1));
-    m_colorShader->setMat4("a_model", m_model);
-    cube_model->draw(m_colorShader);
-    m_model = QMatrix4x4();
-    m_model.translate(QVector3D(2.0f, 0.0f, 0.0f));
-    m_model.scale(QVector3D(1.1, 1.1, 1.1));
-    m_colorShader->setMat4("a_model", m_model);
-    cube_model->draw(m_colorShader);
-    m_colorShader->release();
-    glStencilMask(0xFF);
-    glStencilFunc(GL_ALWAYS, 0, 0xFF);
-    glEnable(GL_DEPTH_TEST);
 }
 
 void CustomOpenglWidget::mousePressEvent(QMouseEvent *event) {

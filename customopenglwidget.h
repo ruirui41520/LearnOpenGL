@@ -36,7 +36,6 @@ private:
 
 private:
     Shader *m_shader;
-    Shader *m_colorShader;
     bool m_leftPressed = false;
     QPoint m_lastPosition;
     std::unique_ptr<CustomCamera> m_camera;

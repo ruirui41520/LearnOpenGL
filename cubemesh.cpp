@@ -44,7 +44,7 @@ void CubeMesh::initData(Shader *shader) {
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    QImage image = QImage(":/wife.png").convertToFormat(QImage::Format_RGBA8888).mirrored(true, true);
+    QImage image = QImage(":/container2.png").convertToFormat(QImage::Format_RGBA8888).mirrored(true, true);
     if(!image.isNull()){
         glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,image.width(),image.height(),0,GL_RGBA,GL_UNSIGNED_BYTE,image.bits());
         glGenerateMipmap(GL_TEXTURE_2D);
