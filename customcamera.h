@@ -32,6 +32,7 @@ public:
     void processMouseScroll(float offset);
     void processMouseMovement(float xOffset,float yOffset);
     void processInput(float timeDuration);
+    QVector3D getPosition() const;
 
 
 private:
@@ -40,7 +41,6 @@ private:
 public:
     float zoom;
     bool keys[1024];
-
 
 private:
     QVector3D m_position,m_front,m_up,m_right,world_up;

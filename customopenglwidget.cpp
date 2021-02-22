@@ -10,6 +10,7 @@ CustomOpenglWidget::CustomOpenglWidget(QWidget *parent)
     m_leftPressed = false;
     cube_model = new CubeModel();
     plane_model = new PlaneModel();
+    m_window = new WindowModel();
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, [=] { update(); });
     m_timer->start(40);
@@ -22,7 +23,10 @@ void CustomOpenglWidget::initializeGL() {
     m_shader = new Shader(":/basic_lighting.vert", ":/basic_lighting.frag");
     cube_model->bindData(m_shader);
     plane_model->bindData(m_shader);
+    m_window->bindData(m_shader);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void CustomOpenglWidget::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
@@ -45,10 +49,13 @@ void CustomOpenglWidget::paintGL() {
     m_model.translate(QVector3D(-1.0f, 0.0f, -1.0f));
     m_shader->setMat4("a_model", m_model);
     cube_model->draw(m_shader);
+
     m_model = QMatrix4x4();
     m_model.translate(QVector3D(2.0f, 0.0f, 0.0f));
     m_shader->setMat4("a_model", m_model);
     cube_model->draw(m_shader);
+
+    m_window->draw(m_shader);
     m_shader->release();
 }
 

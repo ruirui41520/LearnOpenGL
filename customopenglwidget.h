@@ -12,6 +12,7 @@
 #include "cubemodel.h"
 #include "planemodel.h"
 #include "shader.h"
+#include "windowmodel.h"
 
 class CustomOpenglWidget: public QOpenGLWidget,protected QOpenGLFunctions_3_3_Core
 {
@@ -42,6 +43,7 @@ private:
     CubeModel* cube_model;
     PlaneModel* plane_model;
     QTimer *m_timer;
+    WindowModel* m_window;
 
     // QWidget interface
 protected:

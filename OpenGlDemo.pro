@@ -27,7 +27,9 @@ SOURCES += \
         renderframeprovider.cpp \
         shader.cpp \
         shadertransferutil.cpp \
-        videocontainer.cpp
+        videocontainer.cpp \
+        windowmesh.cpp \
+        windowmodel.cpp
 
 RESOURCES += qml.qrc \
     image.qrc \
@@ -61,7 +63,9 @@ HEADERS += \
     renderframeprovider.h \
     shader.h \
     shadertransferutil.h \
-    videocontainer.h
+    videocontainer.h \
+    windowmesh.h \
+    windowmodel.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/lib/release/ -lassimp.5.0.0
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/lib/debug/ -lassimp.5.0.0

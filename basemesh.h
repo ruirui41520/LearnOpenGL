@@ -1,5 +1,8 @@
 #pragma once
 #include "shader.h"
+#include <QVector>
+#include <QVector3D>
+#include <QImage>
 
 class BaseMesh
 {
