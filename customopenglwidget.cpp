@@ -24,6 +24,20 @@ void CustomOpenglWidget::initializeGL() {
     cube_model->bindData(m_shader);
     plane_model->bindData(m_shader);
     m_window->bindData(m_shader);
+    glGenFramebuffers(1,&m_frameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
+    glGenTextures(1, &m_textureColorbuffer);
+    glBindTexture(GL_TEXTURE_2D, m_textureColorbuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width(), height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_textureColorbuffer, 0);
+    glGenRenderbuffers(1, &rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width(), height());
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -32,7 +46,8 @@ void CustomOpenglWidget::initializeGL() {
 void CustomOpenglWidget::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
 
 void CustomOpenglWidget::paintGL() {
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     m_camera->processInput(1.0f);
     //顺序：缩/转/移 -》 matrix_translate * matrix_rotate * matrix_scale

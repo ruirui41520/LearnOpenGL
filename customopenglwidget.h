@@ -44,6 +44,7 @@ private:
     PlaneModel* plane_model;
     QTimer *m_timer;
     WindowModel* m_window;
+    GLuint m_frameBuffer, m_textureColorbuffer, rbo;
 
     // QWidget interface
 protected:
