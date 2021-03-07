@@ -13,6 +13,7 @@
 #include "planemodel.h"
 #include "shader.h"
 #include "windowmodel.h"
+#include "skymodel.h"
 
 class CustomOpenglWidget: public QOpenGLWidget,protected QOpenGLFunctions_3_3_Core
 {
@@ -36,12 +37,12 @@ private:
     void glError(QString content);
 
 private:
-    Shader *m_shader;
+    Shader *m_skyshader, *m_cubeshader;
     bool m_leftPressed = false;
     QPoint m_lastPosition;
     std::unique_ptr<CustomCamera> m_camera;
-    CubeModel* cube_model;
-    PlaneModel* plane_model;
+    CubeModel *cube_model;
+    SkyModel* sky_model;
     QTimer *m_timer;
     WindowModel* m_window;
     GLuint m_frameBuffer, m_textureColorbuffer, rbo;

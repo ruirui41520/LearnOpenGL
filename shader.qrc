@@ -12,5 +12,9 @@
         <file>basic_lighting.frag</file>
         <file>stencil.vert</file>
         <file>stencil.frag</file>
+        <file>sky.vert</file>
+        <file>sky.frag</file>
+        <file>cube.vert</file>
+        <file>cube.frag</file>
     </qresource>
 </RCC>

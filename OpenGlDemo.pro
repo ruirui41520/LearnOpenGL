@@ -27,6 +27,8 @@ SOURCES += \
         renderframeprovider.cpp \
         shader.cpp \
         shadertransferutil.cpp \
+        skymesh.cpp \
+        skymodel.cpp \
         videocontainer.cpp \
         windowmesh.cpp \
         windowmodel.cpp
@@ -63,6 +65,8 @@ HEADERS += \
     renderframeprovider.h \
     shader.h \
     shadertransferutil.h \
+    skymesh.h \
+    skymodel.h \
     videocontainer.h \
     windowmesh.h \
     windowmodel.h

@@ -9,8 +9,7 @@ CustomOpenglWidget::CustomOpenglWidget(QWidget *parent)
     m_camera = std::make_unique<CustomCamera>(QVector3D(5.0f, 0.0f, 10.0f));
     m_leftPressed = false;
     cube_model = new CubeModel();
-    plane_model = new PlaneModel();
-    m_window = new WindowModel();
+    sky_model = new SkyModel();
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, [=] { update(); });
     m_timer->start(40);
@@ -20,24 +19,10 @@ CustomOpenglWidget::~CustomOpenglWidget() {}
 
 void CustomOpenglWidget::initializeGL() {
     this->initializeOpenGLFunctions();
-    m_shader = new Shader(":/basic_lighting.vert", ":/basic_lighting.frag");
-    cube_model->bindData(m_shader);
-    plane_model->bindData(m_shader);
-    m_window->bindData(m_shader);
-    glGenFramebuffers(1,&m_frameBuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
-    glGenTextures(1, &m_textureColorbuffer);
-    glBindTexture(GL_TEXTURE_2D, m_textureColorbuffer);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width(), height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_textureColorbuffer, 0);
-    glGenRenderbuffers(1, &rbo);
-    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width(), height());
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+    m_skyshader = new Shader(":/sky.vert", ":/sky.frag");
+    m_cubeshader = new Shader(":/cube.vert", ":/cube.frag");
+    cube_model->bindData(m_cubeshader);
+    sky_model->bindData(m_skyshader);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -46,32 +31,31 @@ void CustomOpenglWidget::initializeGL() {
 void CustomOpenglWidget::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
 
 void CustomOpenglWidget::paintGL() {
-    glBindFramebuffer(GL_FRAMEBUFFER,0);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     m_camera->processInput(1.0f);
     //顺序：缩/转/移 -》 matrix_translate * matrix_rotate * matrix_scale
-    m_shader->bind();
+    m_cubeshader->bind();
     QMatrix4x4 m_projection;
     m_projection.perspective(m_camera->zoom, 1.0f * width() / height(), 0.1f,
                              100.0f);
-    m_shader->setMat4("a_projection", m_projection);
+    m_cubeshader->setMat4("a_projection", m_projection);
     QMatrix4x4 m_view = m_camera->getViewMatrix();
-    m_shader->setMat4("a_view", m_view);
-    plane_model->draw(m_shader);
+    m_cubeshader->setMat4("a_view", m_view);
 
-    QMatrix4x4 m_model;
-    m_model.translate(QVector3D(-1.0f, 0.0f, -1.0f));
-    m_shader->setMat4("a_model", m_model);
-    cube_model->draw(m_shader);
-
-    m_model = QMatrix4x4();
+    QMatrix4x4 m_model = QMatrix4x4();
     m_model.translate(QVector3D(2.0f, 0.0f, 0.0f));
-    m_shader->setMat4("a_model", m_model);
-    cube_model->draw(m_shader);
+    m_cubeshader->setMat4("a_model", m_model);
+    cube_model->draw(m_cubeshader);
 
-    m_window->draw(m_shader);
-    m_shader->release();
+    glDepthFunc(GL_LEQUAL);
+    m_skyshader->bind();
+    m_skyshader->setMat4("projection",m_projection);
+    m_skyshader->setMat4("view",m_view);
+    sky_model->draw(m_skyshader);
+    m_skyshader->release();
+    m_cubeshader->release();
+    glDepthFunc(GL_LESS);
 }
 
 void CustomOpenglWidget::mousePressEvent(QMouseEvent *event) {
