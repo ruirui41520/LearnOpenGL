@@ -20,7 +20,7 @@ CustomOpenglWidget::~CustomOpenglWidget() {}
 void CustomOpenglWidget::initializeGL() {
     this->initializeOpenGLFunctions();
     local_model = new Model(path);
-    m_shader = new Shader(":/basic_lighting.vert",":/basic_lighting.frag");
+    m_shader = new Shader(":/model.vert",":/model.frag");
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -39,6 +39,8 @@ void CustomOpenglWidget::paintGL() {
     QMatrix4x4 m_view = m_camera->getViewMatrix();
     m_shader->setMat4("a_view", m_view);
     QMatrix4x4 m_model;
+    m_model.translate(QVector3D(0.0f,-4.0f,0.0f));
+    m_model.scale(QVector3D(0.5f, 0.5f, 0.5f));
     m_shader->setMat4("a_model", m_model);
     local_model->draw(m_shader);
     m_shader->release();
