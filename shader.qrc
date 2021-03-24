@@ -10,5 +10,6 @@
         <file>rgb2yuv422.frag</file>
         <file>model.vert</file>
         <file>model.frag</file>
+        <file>model.gs</file>
     </qresource>
 </RCC>

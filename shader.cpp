@@ -6,11 +6,17 @@ Shader::Shader(QString verFilePath, QString fragFilePath, QString geometryPath)
     m_programId = m_program->programId();
     bool success = m_program->addCacheableShaderFromSourceFile(QOpenGLShader::Vertex,verFilePath);
     if(!success){
-        glError("addCacheableShaderFromSourceVertex");
+        glError("addCacheableShaderFromSourceVertex Vertex");
     }
     success = m_program->addCacheableShaderFromSourceFile(QOpenGLShader::Fragment,fragFilePath);
     if(!success){
-        glError("addCacheableShaderFromSourceFile");
+        glError("addCacheableShaderFromSourceFile Fragment");
+    }
+    if(geometryPath != nullptr){
+        success = m_program->addCacheableShaderFromSourceFile(QOpenGLShader::Geometry,geometryPath);
+    }
+    if(!success){
+        glError("addCacheableShaderFromSourceFile Geometry");
     }
     m_program->link();
 }

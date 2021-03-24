@@ -10,9 +10,10 @@ CustomOpenglWidget::CustomOpenglWidget(QWidget *parent)
     m_leftPressed = false;
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, [=]{
+        m_nTimeValue += 5;
             update();
         });
-    m_timer->start(40);
+    m_timer->start(200);
 }
 
 CustomOpenglWidget::~CustomOpenglWidget() {}
@@ -20,7 +21,7 @@ CustomOpenglWidget::~CustomOpenglWidget() {}
 void CustomOpenglWidget::initializeGL() {
     this->initializeOpenGLFunctions();
     local_model = new Model(path);
-    m_shader = new Shader(":/model.vert",":/model.frag");
+    m_shader = new Shader(":/model.vert",":/model.frag",":/model.gs");
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -42,6 +43,7 @@ void CustomOpenglWidget::paintGL() {
     m_model.translate(QVector3D(0.0f,-4.0f,0.0f));
     m_model.scale(QVector3D(0.5f, 0.5f, 0.5f));
     m_shader->setMat4("a_model", m_model);
+    m_shader->setFloat("time", m_nTimeValue);
     local_model->draw(m_shader);
     m_shader->release();
 }

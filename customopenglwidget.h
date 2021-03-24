@@ -43,6 +43,7 @@ private:
     QPoint m_lastPosition;
     std::unique_ptr<CustomCamera> m_camera;
     Model* local_model;
+    int m_nTimeValue = 0;
     // QWidget interface
 protected:
 
