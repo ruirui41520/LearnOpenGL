@@ -23,6 +23,17 @@ void CustomOpenglWidget::initializeGL() {
   m_cubeshader = new Shader(":/cube.vert", ":/cube.frag");
   cube_model->bindData(m_cubeshader);
   sky_model->bindData(m_skyshader);
+
+  GLuint m_uniformBlockCube = glGetUniformBlockIndex(m_cubeshader->shaderId(), "Matrices");
+  GLuint m_uniformBlockSky = glGetUniformBlockIndex(m_skyshader->shaderId(), "Matrices");
+  glUniformBlockBinding(m_cubeshader->shaderId(),m_uniformBlockCube,0);
+  glUniformBlockBinding(m_skyshader->shaderId(),m_uniformBlockSky,0);
+  glGenBuffers(1,&m_uboMatrices);
+  glBindBuffer(GL_UNIFORM_BUFFER,m_uboMatrices);
+  glBufferData(GL_UNIFORM_BUFFER,32*sizeof (float),NULL,GL_STATIC_DRAW);
+  glBindBuffer(GL_UNIFORM_BUFFER,0);
+  glBindBufferRange(GL_UNIFORM_BUFFER,0, m_uboMatrices,0 , 32*sizeof (float));
+
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -39,24 +50,22 @@ void CustomOpenglWidget::paintGL() {
   m_projection.perspective(m_camera->zoom, 1.0f * width() / height(), 0.1f,
                            100.0f);
   QMatrix4x4 m_view = m_camera->getViewMatrix();
+  glBindBuffer(GL_UNIFORM_BUFFER, m_uboMatrices);
+  glBufferSubData(GL_UNIFORM_BUFFER,0, 16*sizeof (float), m_projection.data());
+  glBufferSubData(GL_UNIFORM_BUFFER, 16*sizeof (float),16*sizeof (float), m_view.data());
+  glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
   m_cubeshader->bind();
   QMatrix4x4 m_model = QMatrix4x4();
   m_model.translate(QVector3D(2.0f, 0.0f, 0.0f));
-  m_cubeshader->setProjection(m_projection);
-  m_cubeshader->setView(m_view);
   m_cubeshader->setMat4("a_model", m_model);
   cube_model->draw(m_cubeshader);
-  m_model.translate(-0.75f, 0.75f, 0.0f);
+  m_model.translate(-4.0f, 2.0f, 0.0f);
   m_cubeshader->setMat4("a_model", m_model);
   cube_model->draw(m_cubeshader);
 
   glDepthFunc(GL_LEQUAL);
   m_skyshader->bind();
-  QMatrix4x4 m_newprojection;
-  m_newprojection.perspective(m_camera->zoom, 1.0f * width() / height(), 100.0f,
-                           100.0f);
-  m_skyshader->setMat4("projection", m_newprojection);
-  m_skyshader->setMat4("view", m_view);
   sky_model->draw(m_skyshader);
   m_skyshader->release();
   m_cubeshader->release();

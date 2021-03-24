@@ -45,7 +45,7 @@ private:
     SkyModel* sky_model;
     QTimer *m_timer;
     WindowModel* m_window;
-    GLuint m_frameBuffer, m_textureColorbuffer, rbo;
+    GLuint m_frameBuffer, m_textureColorbuffer, rbo, m_uboMatrices;
 
     // QWidget interface
 protected:

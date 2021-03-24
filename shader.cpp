@@ -23,12 +23,6 @@ GLint Shader::uniformPosition(QString name) {
 
 GLuint Shader::shaderId() { return m_programId; }
 
-void Shader::setProjection(QMatrix4x4 projectionMatrix) {
-  m_projection = projectionMatrix;
-}
-
-void Shader::setView(QMatrix4x4 viewMatrix) { m_view = viewMatrix; }
-
 void Shader::setBool(QString name, bool value) const {
   m_program->setUniformValue(name.toStdString().c_str(), (int)value);
 }
@@ -67,16 +61,6 @@ void Shader::setVec4(QString name, float x, float y, float z, float w) const {
 
 void Shader::setMat4(QString name, QMatrix4x4 &value) const {
   m_program->setUniformValue(name.toStdString().c_str(), value);
-}
-
-QMatrix4x4 Shader::projection()
-{
-    return m_projection;
-}
-
-QMatrix4x4 Shader::view()
-{
-    return m_view;
 }
 
 void Shader::glError(QString content) {

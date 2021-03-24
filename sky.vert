@@ -1,7 +1,10 @@
 #version 330 core
 layout(location = 0) in vec3 aPos;
-uniform mat4 projection;
-uniform mat4 view;
+layout (std140) uniform Matrices
+{
+    mat4 a_projection;
+    mat4 a_view;
+};
 
 out VS_OUT
 {
@@ -11,6 +14,6 @@ out VS_OUT
 void main(void)
 {
     vs_out.TexCoords = aPos;
-    vec4 pos = projection * view * vec4(aPos,1.0);
+    vec4 pos = a_projection * a_view * vec4(aPos,1.0);
     gl_Position = pos.xyww;
 }

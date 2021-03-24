@@ -11,6 +11,6 @@ public:
     void draw(Shader *shader=nullptr);
 
 private:
-    GLuint m_textureId, m_uboMatrices;
+    GLuint m_textureId;
 };
 

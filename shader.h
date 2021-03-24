@@ -23,8 +23,6 @@ public:
     }
     GLint uniformPosition(QString name);
     GLuint shaderId();
-    void setProjection(QMatrix4x4 projectionMatrix);
-    void setView(QMatrix4x4 viewMatrix);
     void setBool(QString name,bool value) const;
     void setInt(QString name,int value) const;
     void setFloat(QString name,float value) const;
@@ -36,13 +34,10 @@ public:
     void setVec4(QString name,float x,float y,float z,float w)const;
     void setMat4(QString name,QMatrix4x4 &value)const;
     void glError(QString content);
-    QMatrix4x4 projection();
-    QMatrix4x4 view();
 
 private:
     QOpenGLShaderProgram* m_program;
     GLuint m_programId;
-    QMatrix4x4 m_projection, m_view;
 
 };
 
