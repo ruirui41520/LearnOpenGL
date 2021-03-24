@@ -115,6 +115,15 @@ void CubeMesh::initData(Shader *shader) {
         glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,image.width(),image.height(),0,GL_RGBA,GL_UNSIGNED_BYTE,image.bits());
         glGenerateMipmap(GL_TEXTURE_2D);
     }
+
+    GLuint m_uniformBlockCube = glGetUniformBlockIndex(shader->shaderId(), "Matrices");
+    glUniformBlockBinding(shader->shaderId(),m_uniformBlockCube,0);
+    glGenBuffers(1,&m_uboMatrices);
+    glBindBuffer(GL_UNIFORM_BUFFER,m_uboMatrices);
+    glBufferData(GL_UNIFORM_BUFFER,32*sizeof (float),NULL,GL_STATIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER,0);
+    glBindBufferRange(GL_UNIFORM_BUFFER,0,m_uboMatrices,0 , 2*sizeof (QMatrix4x4().data()));
+
     shader->bind();
     shader->setInt("m_texture",0);
     shader->release();
@@ -125,6 +134,10 @@ void CubeMesh::draw(Shader *shader) {
     Q_UNUSED(shader);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_textureId);
+    glBindBuffer(GL_UNIFORM_BUFFER, m_uboMatrices);
+    glBufferSubData(GL_UNIFORM_BUFFER,0, 16*sizeof (float), shader->projection().data());
+    glBufferSubData(GL_UNIFORM_BUFFER, 16*sizeof (float),16*sizeof (float), shader->view().data());
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);

@@ -1,12 +1,15 @@
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexCoords;
+layout (std140) uniform Matrices
+{
+    mat4 a_projection;
+    mat4 a_view;
+};
 
 out vec2 TexCoords;
 
 uniform mat4 a_model;
-uniform mat4 a_view;
-uniform mat4 a_projection;
 
 void main()
 {
