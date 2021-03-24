@@ -8,7 +8,7 @@
         <file>lamp.vert</file>
         <file>lamp.frag</file>
         <file>rgb2yuv422.frag</file>
-        <file>basic_lighting.vert</file>
-        <file>basic_lighting.frag</file>
+        <file>model.vert</file>
+        <file>model.frag</file>
     </qresource>
 </RCC>
