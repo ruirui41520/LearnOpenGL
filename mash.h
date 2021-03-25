@@ -34,9 +34,15 @@ public:
     Mash(QVector<Vertex> vertices, QVector<unsigned int>indices, std::vector<Texture> textures);
 
     void draw(Shader *shader);
+    void drawUseInstance(Shader *shader,int instanceCount);
+
+public:
+    GLuint VAO;
 
 private:
-    GLuint VAO,VBO,EBO;
+    GLuint VBO,EBO;
 
+private:
     void setupMash();
+    void commonDraw(Shader *shader);
 };

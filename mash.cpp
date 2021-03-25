@@ -9,24 +9,21 @@ Mash::Mash(QVector<Vertex> vertices, QVector<unsigned int> indices,
 }
 
 void Mash::draw(Shader *shader) {
-  unsigned int diffuseNr = 1;
-  unsigned int specularNr = 1;
-  for (uint i = 0; i < textures.size(); i++) {
-    glActiveTexture(GL_TEXTURE0 + i);
-    QString number;
-    QString name = textures[i].type;
-    if (name == "texture_diffuse") {
-      number = QString::number(diffuseNr++);
-    }else if (name == "texture_specular") {
-         number = QString::number(specularNr++);
-       }
-    glUniform1i(shader->uniformPosition((name + number).toStdString().c_str()), i);
-    glBindTexture(GL_TEXTURE_2D, textures[i].id);
-  }
+  commonDraw(shader);
   glBindVertexArray(VAO);
   glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
   glActiveTexture(GL_TEXTURE0);
+}
+
+void Mash::drawUseInstance(Shader *shader,int instanceCount)
+{
+    qWarning()<<"drawUseInstance";
+    commonDraw(shader);
+    glBindVertexArray(VAO);
+    glDrawElementsInstanced(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0, instanceCount);
+    glBindVertexArray(0);
+    glActiveTexture(GL_TEXTURE0);
 }
 
 void Mash::setupMash() {
@@ -52,4 +49,23 @@ void Mash::setupMash() {
   glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                         (void *)offsetof(Vertex, TexCoords));
   glBindVertexArray(0);
+}
+
+void Mash::commonDraw(Shader *shader)
+{
+    unsigned int diffuseNr = 1;
+    unsigned int specularNr = 1;
+    for (uint i = 0; i < textures.size(); i++) {
+        glActiveTexture(GL_TEXTURE0 + i);
+        QString number;
+        QString name = textures[i].type;
+        if (name == "texture_diffuse") {
+            number = QString::number(diffuseNr++);
+        }else if (name == "texture_specular") {
+            number = QString::number(specularNr++);
+        }
+        glUniform1i(shader->uniformPosition((name + number).toStdString().c_str()), i);
+        qWarning()<<"drawUseInstance"<<(name + number).toStdString().c_str()<<" /id/ "<<textures[i].id;
+        glBindTexture(GL_TEXTURE_2D, textures[i].id);
+    }
 }

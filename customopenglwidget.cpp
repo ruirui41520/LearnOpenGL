@@ -2,8 +2,10 @@
 #include <QDebug>
 #include <QFile>
 // path :terminal pwd
-const QString path =
-        "/Users/zhaodedong/Project/C++/OpenglDemo/nanosuit/nanosuit.obj";
+const QString planet_path =
+    "/Users/cl10077-tmp/LearnOpenGL/planet/planet.obj";
+const QString rock_path =
+    "/Users/cl10077-tmp/LearnOpenGL/planet/planet.obj";
 CustomOpenglWidget::CustomOpenglWidget(QWidget *parent)
     : QOpenGLWidget(parent) {
     m_camera = std::make_unique<CustomCamera>(QVector3D(5.0f, 0.0f, 10.0f));
@@ -20,8 +22,10 @@ CustomOpenglWidget::~CustomOpenglWidget() {}
 
 void CustomOpenglWidget::initializeGL() {
     this->initializeOpenGLFunctions();
-    local_model = new Model(path);
-    m_shader = new Shader(":/model.vert",":/model.frag",":/model.gs");
+    planet_model = new Model(planet_path);
+    rock_model = new InstanceModel(rock_path);
+    planet_shader = new Shader(":/planet.vert",":/planet.frag",":/planet.gs");
+    rock_shader = new Shader(":/rock.vert",":/rock.frag");
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -31,21 +35,28 @@ void CustomOpenglWidget::paintGL() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_camera->processInput(1.0f);
-    //顺序：缩/转/移 -》 matrix_translate * matrix_rotate * matrix_scale
-    m_shader->bind();
     QMatrix4x4 m_projection;
     m_projection.perspective(m_camera->zoom, 1.0f * width() / height(), 0.1f,
-                             100.0f);
-    m_shader->setMat4("a_projection", m_projection);
+                             1000.0f);
     QMatrix4x4 m_view = m_camera->getViewMatrix();
-    m_shader->setMat4("a_view", m_view);
     QMatrix4x4 m_model;
-    m_model.translate(QVector3D(0.0f,-4.0f,0.0f));
     m_model.scale(QVector3D(0.5f, 0.5f, 0.5f));
-    m_shader->setMat4("a_model", m_model);
-    m_shader->setFloat("time", m_nTimeValue);
-    local_model->draw(m_shader);
-    m_shader->release();
+    //顺序：缩/转/移 -》 matrix_translate * matrix_rotate * matrix_scale
+    planet_shader->bind();
+    planet_shader->setMat4("a_projection", m_projection);
+    planet_shader->setMat4("a_view", m_view);
+    planet_shader->setMat4("a_model", m_model);
+    planet_shader->setFloat("time", 0);
+    planet_model->draw(planet_shader);
+    planet_shader->release();
+
+    rock_shader->bind();
+    rock_shader->setMat4("a_projection", m_projection);
+    rock_shader->setMat4("a_view", m_view);
+    rock_model->draw(rock_shader);
+    rock_shader->release();
+
+
 }
 
 void CustomOpenglWidget::mousePressEvent(QMouseEvent *event) {

@@ -8,8 +8,10 @@
         <file>lamp.vert</file>
         <file>lamp.frag</file>
         <file>rgb2yuv422.frag</file>
-        <file>model.vert</file>
-        <file>model.frag</file>
-        <file>model.gs</file>
+        <file>planet.vert</file>
+        <file>planet.frag</file>
+        <file>planet.gs</file>
+        <file>rock.vert</file>
+        <file>rock.frag</file>
     </qresource>
 </RCC>

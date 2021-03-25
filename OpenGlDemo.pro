@@ -16,6 +16,7 @@ SOURCES += \
         customcamera.cpp \
         customopenglwidget.cpp \
         dispatcher.cpp \
+        instancemodel.cpp \
         main.cpp \
         mash.cpp \
         model.cpp \
@@ -45,6 +46,7 @@ HEADERS += \
     customcamera.h \
     customopenglwidget.h \
     dispatcher.h \
+    instancemodel.h \
     mash.h \
     model.h \
     renderframeprovider.h \

@@ -14,9 +14,9 @@ Shader::Shader(QString verFilePath, QString fragFilePath, QString geometryPath)
     }
     if(geometryPath != nullptr){
         success = m_program->addCacheableShaderFromSourceFile(QOpenGLShader::Geometry,geometryPath);
-    }
-    if(!success){
-        glError("addCacheableShaderFromSourceFile Geometry");
+        if(!success){
+            glError("addCacheableShaderFromSourceFile Geometry");
+        }
     }
     m_program->link();
 }

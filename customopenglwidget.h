@@ -11,6 +11,7 @@
 #include "model.h"
 #include "shader.h"
 #include <QString>
+#include "instancemodel.h"
 
 class CustomOpenglWidget: public QOpenGLWidget,protected QOpenGLFunctions_3_3_Core
 {
@@ -37,12 +38,13 @@ private:
     void glError(QString content);
 
 private:
-    Shader *m_shader;
+    Shader *planet_shader,*rock_shader;
     QTimer *m_timer;
     bool m_leftPressed = false;
     QPoint m_lastPosition;
     std::unique_ptr<CustomCamera> m_camera;
-    Model* local_model;
+    Model *planet_model;
+    InstanceModel *rock_model;
     int m_nTimeValue = 0;
     // QWidget interface
 protected:

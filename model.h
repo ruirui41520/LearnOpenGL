@@ -19,7 +19,7 @@ public:
     Model(QString path);
     void draw(Shader *shader);
 
-private:
+protected:
     QVector<Mash> m_meshes;
     QString directory;
     std::vector<Texture> texture_loaded;
@@ -28,5 +28,4 @@ private:
     Mash processMash(aiMesh *mesh,const aiScene *scene);
     std::vector<Texture> loadMaterialTextures(aiMaterial *mat,aiTextureType type,QString typeName);
     GLuint TextureFromFile(const char *path, const QString &directory, bool gamma=false);
-
 };
