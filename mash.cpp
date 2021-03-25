@@ -18,12 +18,10 @@ void Mash::draw(Shader *shader) {
 
 void Mash::drawUseInstance(Shader *shader,int instanceCount)
 {
-    qWarning()<<"drawUseInstance";
-    commonDraw(shader);
+    Q_UNUSED(shader);
     glBindVertexArray(VAO);
     glDrawElementsInstanced(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0, instanceCount);
     glBindVertexArray(0);
-    glActiveTexture(GL_TEXTURE0);
 }
 
 void Mash::setupMash() {
@@ -65,7 +63,6 @@ void Mash::commonDraw(Shader *shader)
             number = QString::number(specularNr++);
         }
         glUniform1i(shader->uniformPosition((name + number).toStdString().c_str()), i);
-        qWarning()<<"drawUseInstance"<<(name + number).toStdString().c_str()<<" /id/ "<<textures[i].id;
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }
 }

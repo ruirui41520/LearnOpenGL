@@ -14,7 +14,9 @@ private:
 
 private:
     QVector<QMatrix4x4> modelMatrices;
-    int modelCount = 1000;
+
+    int modelCount = 10;
+    GLuint textureId, buffer;
 };
 
 #endif // INSTANCEMODEL_H

@@ -5,7 +5,7 @@
 const QString planet_path =
     "/Users/cl10077-tmp/LearnOpenGL/planet/planet.obj";
 const QString rock_path =
-    "/Users/cl10077-tmp/LearnOpenGL/planet/planet.obj";
+    "/Users/cl10077-tmp/LearnOpenGL/rock/rock.obj";
 CustomOpenglWidget::CustomOpenglWidget(QWidget *parent)
     : QOpenGLWidget(parent) {
     m_camera = std::make_unique<CustomCamera>(QVector3D(5.0f, 0.0f, 10.0f));
@@ -41,7 +41,7 @@ void CustomOpenglWidget::paintGL() {
     QMatrix4x4 m_view = m_camera->getViewMatrix();
     QMatrix4x4 m_model;
     m_model.scale(QVector3D(0.5f, 0.5f, 0.5f));
-    //顺序：缩/转/移 -》 matrix_translate * matrix_rotate * matrix_scale
+//    顺序：缩/转/移 -》 matrix_translate * matrix_rotate * matrix_scale
     planet_shader->bind();
     planet_shader->setMat4("a_projection", m_projection);
     planet_shader->setMat4("a_view", m_view);
@@ -55,8 +55,6 @@ void CustomOpenglWidget::paintGL() {
     rock_shader->setMat4("a_view", m_view);
     rock_model->draw(rock_shader);
     rock_shader->release();
-
-
 }
 
 void CustomOpenglWidget::mousePressEvent(QMouseEvent *event) {
