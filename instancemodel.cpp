@@ -10,9 +10,9 @@ InstanceModel::InstanceModel(QString path) : Model(path) {
     float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
     float x = sin(angle) * radius + displacement;
     displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-    float y = displacement * 0.4f;
+    float y = displacement * 0.4f - 15.0f;
     displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-    float z = cos(angle) * radius + displacement;
+    float z = cos(angle) * radius + displacement -100.0f;
     model = glm::translate(model, glm::vec3(x, y, z));
     // 2. scale: Scale between 0.05 and 0.25f
     float scale = (rand() % 20) / 100.0f + 0.05;

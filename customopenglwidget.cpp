@@ -47,7 +47,7 @@ void CustomOpenglWidget::paintGL() {
                            1000.0f);
   QMatrix4x4 m_view = m_camera->getViewMatrix();
   QMatrix4x4 m_model;
-  m_model.scale(QVector3D(0.5f, 0.5f, 0.5f));
+  m_model.translate(QVector3D(0.0f, -15.0f, -50.0f));
   glBindBuffer(GL_UNIFORM_BUFFER, m_uniformBuffer);
   glBufferSubData(GL_UNIFORM_BUFFER,0,sizeof (glm::mat4),m_projection.data());
   glBufferSubData(GL_UNIFORM_BUFFER,sizeof(glm::mat4), sizeof(glm::mat4),m_view.data());
