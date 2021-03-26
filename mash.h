@@ -12,10 +12,10 @@ struct Vertex{
     QVector3D Position;
     QVector3D Normal;
     QVector2D TexCoords;
-//    // u向量
-//    QVector3D Tangent;
-//    // v向量
-//    QVector3D Bitangent;
+    // u向量
+    QVector3D Tangent;
+    // v向量
+    QVector3D Bitangent;
 };
 
 struct Texture{

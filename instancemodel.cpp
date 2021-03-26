@@ -4,7 +4,7 @@ InstanceModel::InstanceModel(QString path) : Model(path) {
   float radius = 200.0f;
   float offset = 25.0f;
   for (int i = 0; i < modelCount; i++) {
-    QMatrix4x4 model = QMatrix4x4();
+    QMatrix4x4 model;
     float angle = (float)i / (float)modelCount * 360.0f;
     float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
     float x = cos(angle) * radius + displacement;
@@ -25,8 +25,8 @@ InstanceModel::InstanceModel(QString path) : Model(path) {
 void InstanceModel::draw(Shader *shader) {
     glUniform1i(shader->uniformPosition("texture_diffuse1"), 0);
     glActiveTexture(GL_TEXTURE0);
-//    glBindTexture(GL_TEXTURE_2D, texture_loaded.at(0).id);
-    glBindTexture(GL_TEXTURE_2D, textureId);
+    glBindTexture(GL_TEXTURE_2D, texture_loaded.at(0).id);
+//    glBindTexture(GL_TEXTURE_2D, textureId);
     for (int i = 0; i < m_meshes.size(); i++) {
         m_meshes[i].drawUseInstance(shader, modelCount);
     }

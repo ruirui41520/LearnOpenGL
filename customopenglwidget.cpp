@@ -15,7 +15,7 @@ CustomOpenglWidget::CustomOpenglWidget(QWidget *parent)
         m_nTimeValue += 5;
             update();
         });
-    m_timer->start(200);
+    m_timer->start(40);
 }
 
 CustomOpenglWidget::~CustomOpenglWidget() {}

@@ -3,7 +3,7 @@
 #include "model.h"
 #include <QVector>
 
-class InstanceModel:public Model
+class InstanceModel: public Model
 {
 public:
     InstanceModel(QString path);
@@ -14,7 +14,6 @@ private:
 
 private:
     QVector<QMatrix4x4> modelMatrices;
-
     int modelCount = 10;
     GLuint textureId, buffer;
 };

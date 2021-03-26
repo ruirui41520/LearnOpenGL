@@ -59,4 +59,5 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../usr/loca
 else:unix: LIBS += -L$$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/lib/ -lassimp.5.0.0
 
 INCLUDEPATH += $$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/include
+INCLUDEPATH += $$PWD/../../../../../Users/cl10077-tmp/stb
 DEPENDPATH += $$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/include
