@@ -24,6 +24,8 @@ SOURCES += \
         model.cpp \
         planemesh.cpp \
         planemodel.cpp \
+        quadmesh.cpp \
+        quadmodel.cpp \
         renderframeprovider.cpp \
         shader.cpp \
         shadertransferutil.cpp \
@@ -62,6 +64,8 @@ HEADERS += \
     model.h \
     planemesh.h \
     planemodel.h \
+    quadmesh.h \
+    quadmodel.h \
     renderframeprovider.h \
     shader.h \
     shadertransferutil.h \

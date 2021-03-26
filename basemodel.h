@@ -3,6 +3,7 @@
 #include "basemesh.h"
 #include "cubemesh.h"
 #include "planemesh.h"
+#include "quadmesh.h"
 
 class BaseModel
 {

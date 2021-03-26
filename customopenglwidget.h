@@ -14,6 +14,7 @@
 #include "shader.h"
 #include "windowmodel.h"
 #include "skymodel.h"
+#include "quadmodel.h"
 
 class CustomOpenglWidget: public QOpenGLWidget,protected QOpenGLFunctions_3_3_Core
 {
@@ -37,15 +38,15 @@ private:
     void glError(QString content);
 
 private:
-    Shader *m_skyshader, *m_cubeshader;
+    Shader *m_cubeshader, *m_quadshader;
     bool m_leftPressed = false;
     QPoint m_lastPosition;
     std::unique_ptr<CustomCamera> m_camera;
     CubeModel *cube_model;
-    SkyModel* sky_model;
+    QuadModel *quad_model;
     QTimer *m_timer;
     WindowModel* m_window;
-    GLuint m_frameBuffer, m_textureColorbuffer, rbo, m_uboMatrices;
+    GLuint m_frameBuffer, m_textureColorbuffer, rbo, m_uboMatrices,m_textureColorBufferMultiSampled,m_screenFramebuffer,m_screenTexture;
 
     // QWidget interface
 protected:
