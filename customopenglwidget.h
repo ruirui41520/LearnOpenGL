@@ -46,6 +46,7 @@ private:
     Model *planet_model;
     InstanceModel *rock_model;
     int m_nTimeValue = 0;
+    GLuint m_uniformBuffer;
     // QWidget interface
 protected:
 

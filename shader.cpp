@@ -71,6 +71,11 @@ void Shader::setVec4(QString name, float x, float y, float z, float w) const
     m_program->setUniformValue(name.toStdString().c_str(),x,y,z,w);
 }
 
+GLuint Shader::programId() const
+{
+    return m_programId;
+}
+
 void Shader::setMat4(QString name, QMatrix4x4 &value) const
 {
     m_program->setUniformValue(name.toStdString().c_str(),value);
@@ -81,3 +86,4 @@ void Shader::glError(QString content){
         qWarning() << "********" << content << "error :" << Qt::hex << err;
     }
 }
+

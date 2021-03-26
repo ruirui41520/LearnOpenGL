@@ -21,6 +21,18 @@ void CustomOpenglWidget::initializeGL() {
   rock_model = new InstanceModel(rock_path);
   planet_shader = new Shader(":/planet.vert", ":/planet.frag", ":/planet.gs");
   rock_shader = new Shader(":/rock.vert", ":/rock.frag");
+  GLuint m_uniformBlockPlanet =
+      glGetUniformBlockIndex(planet_shader->programId(), "Matrices");
+  GLuint m_uniformBlockRock =
+      glGetUniformBlockIndex(rock_shader->programId(), "Matrices");
+  glUniformBlockBinding(planet_shader->programId(), m_uniformBlockPlanet, 0);
+  glUniformBlockBinding(rock_shader->programId(), m_uniformBlockRock, 0);
+  glGenBuffers(1, &m_uniformBuffer);
+  glBindBuffer(GL_UNIFORM_BUFFER, m_uniformBuffer);
+  glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+  glBindBuffer(GL_UNIFORM_BUFFER, 0);
+  glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_uniformBuffer, 0,
+                    2 * sizeof(glm::mat4));
   glEnable(GL_DEPTH_TEST);
 }
 
@@ -36,18 +48,18 @@ void CustomOpenglWidget::paintGL() {
   QMatrix4x4 m_view = m_camera->getViewMatrix();
   QMatrix4x4 m_model;
   m_model.scale(QVector3D(0.5f, 0.5f, 0.5f));
+  glBindBuffer(GL_UNIFORM_BUFFER, m_uniformBuffer);
+  glBufferSubData(GL_UNIFORM_BUFFER,0,sizeof (glm::mat4),m_projection.data());
+  glBufferSubData(GL_UNIFORM_BUFFER,sizeof(glm::mat4), sizeof(glm::mat4),m_view.data());
+  glBindBuffer(GL_UNIFORM_BUFFER,0);
   //    顺序：缩/转/移 -》 matrix_translate * matrix_rotate * matrix_scale
   planet_shader->bind();
-  planet_shader->setMat4("a_projection", m_projection);
-  planet_shader->setMat4("a_view", m_view);
   planet_shader->setMat4("a_model", m_model);
   planet_shader->setFloat("time", 0);
   planet_model->draw(planet_shader);
   planet_shader->release();
 
   rock_shader->bind();
-  rock_shader->setMat4("a_projection", m_projection);
-  rock_shader->setMat4("a_view", m_view);
   rock_model->draw(rock_shader);
   rock_shader->release();
 }

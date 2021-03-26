@@ -33,6 +33,8 @@ public:
     void setMat4(QString name,QMatrix4x4 &value)const;
     void glError(QString content);
 
+    GLuint programId() const;
+
 private:
     QOpenGLShaderProgram* m_program;
     GLuint m_programId;

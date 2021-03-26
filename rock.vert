@@ -2,10 +2,12 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 2) in vec2 aTexCoords;
 layout (location = 3) in mat4 aInstanceMatrix;
+layout (std140) uniform Matrices
+{
+    mat4 a_projection;
+    mat4 a_view;
+};
 out vec2 TexCoords;
-uniform mat4 a_view;
-uniform mat4 a_projection;
-
 void main(void)
 {
     TexCoords = aTexCoords;
