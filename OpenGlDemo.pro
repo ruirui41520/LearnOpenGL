@@ -57,7 +57,9 @@ HEADERS += \
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/lib/release/ -lassimp.5.0.0
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/lib/debug/ -lassimp.5.0.0
 else:unix: LIBS += -L$$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/lib/ -lassimp.5.0.0
+LIBS += -L$$PWD/../../../../../usr/local/Cellar/glm/0.9.9.8/lib
 
 INCLUDEPATH += $$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/include
 INCLUDEPATH += $$PWD/../../../../../Users/cl10077-tmp/stb
+INCLUDEPATH += $$PWD/../../../../../usr/local/Cellar/glm/0.9.9.8/include
 DEPENDPATH += $$PWD/../../../../../usr/local/Cellar/assimp/5.0.1/include

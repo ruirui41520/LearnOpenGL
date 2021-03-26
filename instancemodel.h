@@ -2,6 +2,9 @@
 #define INSTANCEMODEL_H
 #include "model.h"
 #include <QVector>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class InstanceModel: public Model
 {
@@ -13,9 +16,9 @@ private:
     void applyInstanceData();
 
 private:
-    QVector<QMatrix4x4> modelMatrices;
-    int modelCount = 10;
-    GLuint textureId, buffer;
+    glm::mat4* modelMatrices;;
+    uint modelCount = 10000;
+    GLuint buffer;
 };
 
 #endif // INSTANCEMODEL_H
