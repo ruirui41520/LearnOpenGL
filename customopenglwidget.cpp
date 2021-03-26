@@ -28,7 +28,7 @@ void CustomOpenglWidget::initializeGL() {
   glUniformBlockBinding(m_cubeshader->shaderId(),m_uniformBlockCube,0);
   glGenBuffers(1,&m_uboMatrices);
   glBindBuffer(GL_UNIFORM_BUFFER,m_uboMatrices);
-  glBufferData(GL_UNIFORM_BUFFER,32*sizeof (float),NULL,GL_STATIC_DRAW);
+  glBufferData(GL_UNIFORM_BUFFER, 32*sizeof (float),NULL,GL_STATIC_DRAW);
   glBindBuffer(GL_UNIFORM_BUFFER,0);
   glBindBufferRange(GL_UNIFORM_BUFFER,0, m_uboMatrices,0 , 32*sizeof (float));
 
@@ -55,17 +55,14 @@ void CustomOpenglWidget::initializeGL() {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,m_screenTexture,0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
   glEnable(GL_DEPTH_TEST);
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void CustomOpenglWidget::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
 
 void CustomOpenglWidget::paintGL() {
   glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   m_camera->processInput(1.0f);
   //顺序：缩/转/移 -》 matrix_translate * matrix_rotate * matrix_scale
   QMatrix4x4 m_projection;
@@ -81,6 +78,7 @@ void CustomOpenglWidget::paintGL() {
   glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
+
   m_cubeshader->bind();
   QMatrix4x4 m_model = QMatrix4x4();
   m_model.translate(QVector3D(2.0f, 0.0f, 0.0f));
@@ -91,20 +89,22 @@ void CustomOpenglWidget::paintGL() {
   cube_model->draw(m_cubeshader);
   m_cubeshader->release();
 
+  // 2. now blit multisampled buffer(s) to normal colorbuffer of intermediate FBO. Image is stored in screenTexture
   glBindFramebuffer(GL_READ_FRAMEBUFFER,m_frameBuffer);
   glBindFramebuffer(GL_DRAW_FRAMEBUFFER,m_screenFramebuffer);
   glBlitFramebuffer(0,0,width(),height(),0,0,width(),height(),GL_COLOR_BUFFER_BIT,GL_NEAREST);
 
+  // 3. now render quad with scene's visuals as its texture image
   glBindFramebuffer(GL_FRAMEBUFFER,0);
   glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
   glDisable(GL_DEPTH_TEST);
+
   m_quadshader->bind();
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, m_screenTexture);
+  glBindTexture(GL_TEXTURE_2D, m_screenTexture);//use the now resolved color attachment as the quad's texture
   quad_model->draw(m_quadshader);
   m_quadshader->release();
-
 }
 
 void CustomOpenglWidget::mousePressEvent(QMouseEvent *event) {
