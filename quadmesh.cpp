@@ -3,9 +3,16 @@
 QuadMesh::QuadMesh() {}
 
 void QuadMesh::initData(Shader *shader) {
-  float quadVertices[] = {-1.0f, 1.0f,  0.0f, 1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
-                          1.0f,  -1.0f, 1.0f, 0.0f, -1.0f, 1.0f,  0.0f, 1.0f,
-                          1.0f,  -1.0f, 1.0f, 0.0f, 1.0f,  1.0f,  1.0f, 1.0f};
+    float quadVertices[] = {   // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+                            // positions   // texCoords
+                            -1.0f,  1.0f,  0.0f, 1.0f,
+                            -1.0f, -1.0f,  0.0f, 0.0f,
+                            1.0f, -1.0f,  1.0f, 0.0f,
+
+                            -1.0f,  1.0f,  0.0f, 1.0f,
+                            1.0f, -1.0f,  1.0f, 0.0f,
+                            1.0f,  1.0f,  1.0f, 1.0f
+    };
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
   glBindVertexArray(VAO);
@@ -15,8 +22,7 @@ void QuadMesh::initData(Shader *shader) {
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *)0);
   glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
-                        (void *)(2 * sizeof(float)));
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),(void *)(2 * sizeof(float)));
   shader->bind();
   shader->setInt("screenTexture", 0);
   shader->release();

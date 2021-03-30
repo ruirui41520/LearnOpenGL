@@ -16,7 +16,7 @@
         <file>sky.frag</file>
         <file>cube.vert</file>
         <file>cube.frag</file>
-        <file>quad.vert</file>
-        <file>quad.frag</file>
+        <file>screen.vert</file>
+        <file>screen.frag</file>
     </qresource>
 </RCC>
