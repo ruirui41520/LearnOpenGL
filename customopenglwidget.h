@@ -41,15 +41,14 @@ private:
     void glError(QString content);
 
 private:
-    Shader *m_cubeshader, *m_sceenshader;
+    Shader *m_planeshader;
     bool m_leftPressed = false;
     QPoint m_lastPosition;
     std::unique_ptr<CustomCamera> m_camera;
-    CubeModel *cube_model;
-    QuadModel *screen_model;
     QTimer *m_timer;
-    WindowModel* m_window;
-    GLuint m_frameBuffer, m_textureColorbuffer, rbo, m_uboMatrices,m_textureColorBufferMultiSampled,m_screenFramebuffer,m_screenTexture;
+    GLuint m_texture,m_uboMatrices;
+    PlaneModel *m_planeModel;
+
 
     // QWidget interface
 protected:

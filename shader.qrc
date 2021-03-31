@@ -18,5 +18,7 @@
         <file>cube.frag</file>
         <file>screen.vert</file>
         <file>screen.frag</file>
+        <file>plane.vert</file>
+        <file>plane.frag</file>
     </qresource>
 </RCC>
