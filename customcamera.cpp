@@ -98,7 +98,7 @@ void CustomCamera::updateCameraVectors() {
   m_up = QVector3D::crossProduct(m_right, m_front).normalized();
 }
 
-QVector3D CustomCamera::getPosition() const
+QVector3D CustomCamera::getPosition()
 {
     return m_position;
 }

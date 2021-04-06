@@ -32,7 +32,7 @@ public:
     void processMouseScroll(float offset);
     void processMouseMovement(float xOffset,float yOffset);
     void processInput(float timeDuration);
-    QVector3D getPosition() const;
+    QVector3D getPosition();
 
 
 private:

@@ -48,6 +48,7 @@ private:
     QTimer *m_timer;
     GLuint m_texture,m_uboMatrices;
     PlaneModel *m_planeModel;
+    bool blinn = true;
 
 
     // QWidget interface

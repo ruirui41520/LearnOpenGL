@@ -17,7 +17,8 @@ CustomOpenglWidget::~CustomOpenglWidget() {}
 
 void CustomOpenglWidget::initializeGL() {
   this->initializeOpenGLFunctions();
-  m_planeshader = new Shader(":/cube.vert", ":/cube.frag");
+  m_planeshader = new Shader(":/plane.vert", ":/plane.frag");
+  m_planeModel = new PlaneModel();
   m_planeModel->bindData(m_planeshader);
 
   GLuint m_uniformBlockCube =
@@ -30,13 +31,13 @@ void CustomOpenglWidget::initializeGL() {
   glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_uboMatrices, 0,
                     2 * sizeof(glm::mat4));
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void CustomOpenglWidget::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
 
 void CustomOpenglWidget::paintGL() {
-  GLint oldFBO;
-  glGetIntegerv(GL_FRAMEBUFFER_BINDING, &oldFBO);
   glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   m_camera->processInput(1.0f);
@@ -46,14 +47,16 @@ void CustomOpenglWidget::paintGL() {
                            1000.0f);
   QMatrix4x4 m_view = m_camera->getViewMatrix();
   glBindBuffer(GL_UNIFORM_BUFFER, m_uboMatrices);
-  glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), m_projection.data());
+  glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), m_view.data());
   glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4),
-                  m_view.data());
+                  m_projection.data());
   glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
+  QVector3D lightPos(3.0f, 3.0f, 0.0f);
+  QVector3D viewPos = m_camera->getPosition();
   m_planeshader->bind();
-  QMatrix4x4 m_model = QMatrix4x4();
-  m_planeshader->setMat4("a_model", m_model);
+  m_planeshader->setVec3("viewPos", viewPos);
+  m_planeshader->setVec3("lightPos",lightPos);
+  m_planeshader->setInt("blinn",blinn);
   m_planeModel->draw(m_planeshader);
   m_planeshader->release();
 }
