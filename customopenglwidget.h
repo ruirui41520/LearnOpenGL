@@ -9,8 +9,7 @@
 #include <QString>
 #include "customcamera.h"
 #include "basemodel.h"
-#include "cubemodel.h"
-#include "planemodel.h"
+#include "shadowmodel.h"
 #include "shader.h"
 #include "windowmodel.h"
 #include "skymodel.h"
@@ -41,13 +40,13 @@ private:
     void glError(QString content);
 
 private:
-    Shader *m_planeshader;
+    Shader *m_shadowShader;
     bool m_leftPressed = false;
     QPoint m_lastPosition;
     std::unique_ptr<CustomCamera> m_camera;
     QTimer *m_timer;
-    GLuint m_texture,m_uboMatrices;
-    PlaneModel *m_planeModel;
+    ShadowModel *m_shadowModel;
+    GLuint m_uboMatrices;
     bool blinn = true;
 
 

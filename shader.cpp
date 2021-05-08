@@ -21,7 +21,7 @@ GLint Shader::uniformPosition(QString name) {
   return m_program->uniformLocation(name);
 }
 
-GLuint Shader::shaderId() { return m_programId; }
+GLuint Shader::shaderId() const{ return m_programId; }
 
 void Shader::setBool(QString name, bool value) const {
   m_program->setUniformValue(name.toStdString().c_str(), (int)value);
@@ -43,7 +43,7 @@ void Shader::setVec2(QString name, float x, float y) const {
   m_program->setUniformValue(name.toStdString().c_str(), x, y);
 }
 
-void Shader::setVec3(QString name, QVector3D &value) const {
+void Shader::setVec3(QString name, const QVector3D &value) const {
   m_program->setUniformValue(name.toStdString().c_str(), value);
 }
 

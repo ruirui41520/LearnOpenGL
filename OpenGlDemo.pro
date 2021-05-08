@@ -29,6 +29,9 @@ SOURCES += \
         renderframeprovider.cpp \
         shader.cpp \
         shadertransferutil.cpp \
+        shadowmesh.cpp \
+        shadowmodel.cpp \
+        simpledepthshader.cpp \
         skymesh.cpp \
         skymodel.cpp \
         videocontainer.cpp \
@@ -70,6 +73,9 @@ HEADERS += \
     renderframeprovider.h \
     shader.h \
     shadertransferutil.h \
+    shadowmesh.h \
+    shadowmodel.h \
+    simpledepthshader.h \
     skymesh.h \
     skymodel.h \
     videocontainer.h \
