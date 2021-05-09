@@ -32,6 +32,7 @@ void CustomOpenglWidget::initializeGL() {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 }
 
 void CustomOpenglWidget::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
@@ -50,10 +51,9 @@ void CustomOpenglWidget::paintGL() {
   glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4),
                   m_projection.data());
   glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
+  m_shadowShader->bind();
   m_shadowShader->setVec3("viewPos", m_camera->getPosition());
   m_shadowModel->draw(m_shadowShader);
-  glError("test");
 
 }
 
