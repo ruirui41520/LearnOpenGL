@@ -52,8 +52,7 @@ void CustomOpenglWidget::paintGL() {
                   m_projection.data());
   glBindBuffer(GL_UNIFORM_BUFFER, 0);
   m_shadowShader->bind();
-  m_shadowShader->setVec3("viewPos", m_camera->getPosition());
-  m_shadowModel->draw(m_shadowShader);
+  m_shadowModel->drawWithPos(m_shadowShader,m_camera->getPosition());
 
 }
 
