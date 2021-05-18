@@ -4,41 +4,6 @@ ShadowMesh::ShadowMesh(){
     depthShader = new Shader(":/shadow_depth.vert",":/shadow_depth.frag");
 }
 
-void ShadowMesh::draw(Shader *shader, QVector3D viewPos)
-{
-    glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
-    glm::mat4 lightProjection, lightView;
-    glm::mat4 lightSpaceMatrix;
-    float near_plane = 1.0f, far_plane = 7.5f;
-    lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-    lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
-    lightSpaceMatrix = lightProjection * lightView;
-
-    depthShader->bind();
-    depthShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
-    glViewport(0,0,SHADOW_WIDTH,SHADOW_HEIGHT);
-    glBindFramebuffer(GL_FRAMEBUFFER,depthMapFBO);
-    glClear(GL_DEPTH_BUFFER_BIT);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,m_texture0Id);
-    drawShaderData(depthShader);
-    glBindFramebuffer(GL_FRAMEBUFFER,0);
-    depthShader->release();
-
-    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_texture0Id);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, m_texture1Id);
-    shader->bind();
-    shader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
-    shader->setVec3("lightPos",lightPos);
-    shader->setVec3("viewPos", viewPos);
-    drawShaderData(shader);
-    shader->release();
-}
-
 void ShadowMesh::initData(Shader *shader)
 {
     float planeVertices[] = {
@@ -121,15 +86,18 @@ void ShadowMesh::initData(Shader *shader)
 
     glGenTextures(1,&m_texture0Id);
     glBindTexture(GL_TEXTURE_2D,m_texture0Id);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
     QImage image = QImage(":/textures/wood.png").convertToFormat(QImage::Format_RGBA8888).mirrored(true,true);
     if(!image.isNull()){
-        glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,image.width(),image.height(),0,GL_RGBA,GL_UNSIGNED_BYTE,image.bits());
+        glTexImage2D(GL_TEXTURE_2D,0, GL_RGBA,image.width(),image.height(),0,GL_RGBA,GL_UNSIGNED_BYTE,image.bits());
         glGenerateMipmap(GL_TEXTURE_2D);
+        SCR_WIDTH = image.width();
+        SCR_HEIGHT = image.height();
     }
+
     glGenFramebuffers(1,&depthMapFBO);
     glGenTextures(1,&m_texture1Id);
     glBindTexture(GL_TEXTURE_2D,m_texture1Id);
@@ -147,6 +115,42 @@ void ShadowMesh::initData(Shader *shader)
     shader->bind();
     shader->setInt("diffuseTexture",0);
     shader->setInt("shadowMap",1);
+    shader->release();
+}
+
+void ShadowMesh::draw(Shader *shader, QVector3D viewPos)
+{
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
+    glm::vec3 lightPos(-2.0f, 8.0f, 1.0f);
+    glm::mat4 lightProjection, lightView;
+    glm::mat4 lightSpaceMatrix;
+    float near_plane = 1.0f, far_plane = 7.5f;
+    lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+    lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+    lightSpaceMatrix = lightProjection * lightView;
+
+    depthShader->bind();
+    depthShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+    glViewport(0,0,SHADOW_WIDTH,SHADOW_HEIGHT);
+    glBindFramebuffer(GL_FRAMEBUFFER,depthMapFBO);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D,m_texture0Id);
+    drawShaderData(depthShader);
+    glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
+    depthShader->release();
+
+    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_texture0Id);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, m_texture1Id);
+    shader->bind();
+    shader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+    shader->setVec3("lightPos", lightPos);
+    shader->setVec3("viewPos", viewPos);
+    drawShaderData(shader);
     shader->release();
 }
 

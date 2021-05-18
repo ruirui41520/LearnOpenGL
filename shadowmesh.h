@@ -24,9 +24,10 @@ private:
     GLuint m_planeVAO,m_planeVBO,m_cubeVAO,m_cubeVBO;
     Shader* depthShader;
     GLuint depthMapFBO;
+    GLint defaultFBO;
     const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-    const unsigned int SCR_WIDTH = 800;
-    const unsigned int SCR_HEIGHT = 600;
+    unsigned int SCR_WIDTH = 800;
+    unsigned int SCR_HEIGHT = 600;
 };
 
 #endif // SHADOWMESH_H

@@ -30,15 +30,12 @@ void CustomOpenglWidget::initializeGL() {
   glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_uboMatrices, 0,
                     2 * sizeof(glm::mat4));
   glEnable(GL_DEPTH_TEST);
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 }
 
 void CustomOpenglWidget::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
 
 void CustomOpenglWidget::paintGL() {
-  glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+  glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   m_camera->processInput(1.0f);
   //顺序：缩/转/移 -》 matrix_translate * matrix_rotate * matrix_scale
@@ -53,7 +50,6 @@ void CustomOpenglWidget::paintGL() {
   glBindBuffer(GL_UNIFORM_BUFFER, 0);
   m_shadowShader->bind();
   m_shadowModel->drawWithPos(m_shadowShader,m_camera->getPosition());
-
 }
 
 void CustomOpenglWidget::mousePressEvent(QMouseEvent *event) {
