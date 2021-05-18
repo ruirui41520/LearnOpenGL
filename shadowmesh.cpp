@@ -7,13 +7,13 @@ ShadowMesh::ShadowMesh(){
 void ShadowMesh::initData(Shader *shader)
 {
     float planeVertices[] = {
-        25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
-        -25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
-        -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
+        25.0f, -1.0f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
+        -25.0f, -1.0f,  25.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+        -25.0f, -1.0f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
 
-        25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
-        -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
-        25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f
+        25.0f, -1.0f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
+        -25.0f, -1.0f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
+        25.0f, -1.0f, -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f
     };
     float cubeVertices[] = {
         -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
@@ -102,8 +102,10 @@ void ShadowMesh::initData(Shader *shader)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
     glBindFramebuffer(GL_FRAMEBUFFER,depthMapFBO);
     glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,m_texture1Id,0);
     glDrawBuffer(GL_NONE);
@@ -118,7 +120,7 @@ void ShadowMesh::initData(Shader *shader)
 void ShadowMesh::draw(Shader *shader, QVector3D viewPos,int screenWidth,int screenHeight)
 {
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
-    glm::vec3 lightPos(-2.0f, 8.0f, 1.0f);
+    glm::vec3 lightPos(-2.0f, 4.0f, 7.0f);
     glm::mat4 lightProjection, lightView;
     glm::mat4 lightSpaceMatrix;
     float near_plane = 1.0f, far_plane = 7.5f;
@@ -126,6 +128,8 @@ void ShadowMesh::draw(Shader *shader, QVector3D viewPos,int screenWidth,int scre
     lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
     lightSpaceMatrix = lightProjection * lightView;
 
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
     depthShader->bind();
     depthShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
     glViewport(0,0, SHADOW_WIDTH, SHADOW_HEIGHT);
@@ -135,9 +139,12 @@ void ShadowMesh::draw(Shader *shader, QVector3D viewPos,int screenWidth,int scre
     glBindTexture(GL_TEXTURE_2D,m_texture0Id);
     drawShaderData(depthShader);
     depthShader->release();
+    glCullFace(GL_BACK);
+    glDisable(GL_CULL_FACE);
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
 
-    glViewport(0, 0, screenWidth, screenHeight);
+    // 2倍的（width 和 height）on retina/4k displays?： https://stackoverflow.com/questions/25230841/how-to-find-display-scaling-factor-on-retina-4k-displays
+    glViewport(0, 0, 2*screenWidth, 2*screenHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_texture0Id);
@@ -158,10 +165,10 @@ void ShadowMesh::drawShaderData(Shader *shader)
     glBindVertexArray(m_planeVAO);
     glDrawArrays(GL_TRIANGLES,0,6);
     glBindVertexArray(m_cubeVAO);
-    model.translate(QVector3D(0.0f, 1.5f, 0.0));
+    model.translate(QVector3D(3.0f, 0.0f, 4.0f));
     shader->setMat4("model",model);
     glDrawArrays(GL_TRIANGLES, 0, 36);
-    model.translate(QVector3D(2.0f, 0.0f, 1.0));
+    model.translate(QVector3D(5.0f, 0.0f, 4.0f));
     shader->setMat4("model",model);
     glDrawArrays(GL_TRIANGLES,0,36);
     glBindVertexArray(0);

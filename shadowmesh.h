@@ -25,7 +25,7 @@ private:
     Shader* depthShader;
     GLuint depthMapFBO;
     GLint defaultFBO;
-    const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+    const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
 };
 
 #endif // SHADOWMESH_H
