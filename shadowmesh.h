@@ -9,12 +9,12 @@ class ShadowMesh:public BaseMesh
 {
 public:
     ShadowMesh();
-    void draw(Shader *shader,QVector3D viewPos);
+    void draw(Shader *shader,QVector3D viewPos,int screenWidth,int screenHeight);
 
     // BaseMesh interface
 public:
     void initData(Shader *shader);
-    void draw(Shader *shader){};
+    void draw(Shader *shader){Q_UNUSED(shader)};
 
 private:
     void drawShaderData(Shader *shader);
@@ -26,8 +26,6 @@ private:
     GLuint depthMapFBO;
     GLint defaultFBO;
     const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-    unsigned int SCR_WIDTH = 800;
-    unsigned int SCR_HEIGHT = 600;
 };
 
 #endif // SHADOWMESH_H

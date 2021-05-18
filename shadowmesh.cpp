@@ -94,8 +94,6 @@ void ShadowMesh::initData(Shader *shader)
     if(!image.isNull()){
         glTexImage2D(GL_TEXTURE_2D,0, GL_RGBA,image.width(),image.height(),0,GL_RGBA,GL_UNSIGNED_BYTE,image.bits());
         glGenerateMipmap(GL_TEXTURE_2D);
-        SCR_WIDTH = image.width();
-        SCR_HEIGHT = image.height();
     }
 
     glGenFramebuffers(1,&depthMapFBO);
@@ -111,14 +109,13 @@ void ShadowMesh::initData(Shader *shader)
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER,0);
-
     shader->bind();
     shader->setInt("diffuseTexture",0);
     shader->setInt("shadowMap",1);
     shader->release();
 }
 
-void ShadowMesh::draw(Shader *shader, QVector3D viewPos)
+void ShadowMesh::draw(Shader *shader, QVector3D viewPos,int screenWidth,int screenHeight)
 {
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
     glm::vec3 lightPos(-2.0f, 8.0f, 1.0f);
@@ -131,16 +128,16 @@ void ShadowMesh::draw(Shader *shader, QVector3D viewPos)
 
     depthShader->bind();
     depthShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
-    glViewport(0,0,SHADOW_WIDTH,SHADOW_HEIGHT);
+    glViewport(0,0, SHADOW_WIDTH, SHADOW_HEIGHT);
     glBindFramebuffer(GL_FRAMEBUFFER,depthMapFBO);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,m_texture0Id);
     drawShaderData(depthShader);
-    glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
     depthShader->release();
+    glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
 
-    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+    glViewport(0, 0, screenWidth, screenHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_texture0Id);

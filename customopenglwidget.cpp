@@ -49,7 +49,7 @@ void CustomOpenglWidget::paintGL() {
                   m_projection.data());
   glBindBuffer(GL_UNIFORM_BUFFER, 0);
   m_shadowShader->bind();
-  m_shadowModel->drawWithPos(m_shadowShader,m_camera->getPosition());
+  m_shadowModel->drawWithPos(m_shadowShader,m_camera->getPosition(),width(),height());
 }
 
 void CustomOpenglWidget::mousePressEvent(QMouseEvent *event) {

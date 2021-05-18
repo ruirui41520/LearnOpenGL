@@ -7,7 +7,7 @@ class ShadowModel:public BaseModel
 {
 public:
     ShadowModel();
-    void drawWithPos(Shader* shader,QVector3D viewPos);
+    void drawWithPos(Shader* shader,QVector3D viewPos, int screenWidth,int screenHeight);
 };
 
 #endif // SHADOWMODEL_H
