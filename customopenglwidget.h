@@ -8,15 +8,14 @@
 #include <QTimer>
 #include <QString>
 #include "customcamera.h"
-#include "basemodel.h"
-#include "shadowmodel.h"
-#include "shader.h"
 #include "windowmodel.h"
 #include "skymodel.h"
 #include "quadmodel.h"
 #include <glm.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "basescene.h"
+#include "pointshaderscene.h"
 
 class CustomOpenglWidget: public QOpenGLWidget,protected QOpenGLFunctions_3_3_Core
 {
@@ -40,15 +39,13 @@ private:
     void glError(QString content);
 
 private:
-    Shader *m_shadowShader;
+
     bool m_leftPressed = false;
     QPoint m_lastPosition;
     std::unique_ptr<CustomCamera> m_camera;
     QTimer *m_timer;
-    ShadowModel *m_shadowModel;
-    GLuint m_uboMatrices;
     bool blinn = true;
-
+    std::unique_ptr<BaseScene> m_scene;
 
     // QWidget interface
 protected:

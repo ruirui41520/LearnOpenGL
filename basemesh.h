@@ -11,6 +11,6 @@ public:
     virtual void draw(Shader* shader=nullptr){Q_UNUSED(shader)};
 
 public:
-    GLuint VAO,VBO;
+    GLuint VAO = 0,VBO = 0;
 };
 

@@ -24,5 +24,10 @@
         <file>shadow_world.frag</file>
         <file>shadow_depth.vert</file>
         <file>shadow_depth.frag</file>
+        <file>point_shadow.vert</file>
+        <file>point_shadow.frag</file>
+        <file>point_shadow_depth.vert</file>
+        <file>point_shadow_depth.frag</file>
+        <file>point_shadow_depth.gs</file>
     </qresource>
 </RCC>

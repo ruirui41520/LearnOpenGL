@@ -24,6 +24,11 @@ SOURCES += \
         model.cpp \
         planemesh.cpp \
         planemodel.cpp \
+        pointshaderscene.cpp \
+        pointshadowdepthmesh.cpp \
+        pointshadowdepthmodel.cpp \
+        pointshadowmesh.cpp \
+        pointshadowmodel.cpp \
         quadmesh.cpp \
         quadmodel.cpp \
         renderframeprovider.cpp \
@@ -58,6 +63,7 @@ HEADERS += \
     abstractframeprovider.h \
     basemesh.h \
     basemodel.h \
+    basescene.h \
     camerasurface.h \
     cubemesh.h \
     cubemodel.h \
@@ -68,6 +74,11 @@ HEADERS += \
     model.h \
     planemesh.h \
     planemodel.h \
+    pointshaderscene.h \
+    pointshadowdepthmesh.h \
+    pointshadowdepthmodel.h \
+    pointshadowmesh.h \
+    pointshadowmodel.h \
     quadmesh.h \
     quadmodel.h \
     renderframeprovider.h \
