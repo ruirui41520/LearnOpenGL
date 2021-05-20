@@ -12,24 +12,17 @@
 class BaseScene
 {
 public:
-    BaseScene(CustomCamera* camera, QOpenGLWidget* widget){
-        m_camera.reset(camera);
-        m_widget.reset(widget);
-    };
-    virtual void initializeGL();
-    virtual void drawScene();
-    int screenWidth(){return m_widget.get()->width();};
-    int screenHeight(){return m_widget.get()->height();};
-    QMatrix4x4 getViewMat(){return m_camera.get()->getViewMatrix();};
-    QMatrix4x4 getProjection(){
-        QMatrix4x4 m_projection;
-        m_projection.perspective(m_camera->zoom, 1.0f * screenWidth() / screenHeight(), 0.1f,
-                                 1000.0f);
-        return m_projection;
-    };
+    BaseScene(CustomCamera* camera, QOpenGLWidget* widget);
+    ~BaseScene();
+    int screenWidth();
+    int screenHeight();
+    QMatrix4x4 getViewMat();
+    QMatrix4x4 getProjection();
+    QVector3D getViewPos();
 
-private:
-    virtual void bindCommonData();
+public:
+    virtual void initializeGL(){};
+    virtual void drawScene(){};
 
 public:
     std::unique_ptr<CustomCamera> m_camera;

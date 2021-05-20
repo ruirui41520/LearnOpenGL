@@ -1,5 +1,4 @@
-#ifndef CUSTOMOPENGLWIDGET_H
-#define CUSTOMOPENGLWIDGET_H
+#pragma once
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLShader>
@@ -45,11 +44,9 @@ private:
     std::unique_ptr<CustomCamera> m_camera;
     QTimer *m_timer;
     bool blinn = true;
-    std::unique_ptr<BaseScene> m_scene;
+    std::unique_ptr<PointShaderScene> m_scene;
 
     // QWidget interface
 protected:
 
 };
-
-#endif // CUSTOMOPENGLWIDGET_H

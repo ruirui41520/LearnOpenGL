@@ -9,6 +9,7 @@ class PointShadowModel: public BaseModel
 {
 public:
     PointShadowModel();
+    void draw(Shader* shader,QVector3D eyePos,GLuint cubeId);
 };
 
 #endif // POINTSHADOWMODEL_H

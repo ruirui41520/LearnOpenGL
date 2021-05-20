@@ -3,6 +3,7 @@
 #include <QVector>
 #include <QVector3D>
 #include <QImage>
+#include "res.h"
 
 class BaseMesh
 {

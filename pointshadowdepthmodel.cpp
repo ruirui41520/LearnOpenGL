@@ -1,6 +1,6 @@
-#include "pointshdowdepthmodel.h"
+#include "pointshadowdepthmodel.h"
 
-PointShdowDepthModel::PointShdowDepthModel()
+PointShadowDepthModel::PointShadowDepthModel()
 {
     m_meshs.append(new PointShadowDepthMesh());
 }

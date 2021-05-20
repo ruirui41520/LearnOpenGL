@@ -1,9 +1,9 @@
 #include "pointshaderscene.h"
 
-PointShaderScene::PointShaderScene(CustomCamera* camera, QOpenGLWidget* widget):BaseScene(camera,widget)
-{ bindCommonData(); }
+PointShaderScene::PointShaderScene(CustomCamera* camera, QOpenGLWidget* widget):BaseScene(camera, widget){}
 
 void PointShaderScene::initializeGL() {
+    bindCommonData();
     m_pointShadowDepthShader = new Shader(":/point_shadow_depth.vert",":/point_shadow_depth.frag",":/point_shadow_depth.gs");
     m_pointShadowDepthModel = new PointShadowDepthModel();
     m_pointShadowDepthModel->bindData(m_pointShadowDepthShader);
@@ -72,30 +72,31 @@ void PointShaderScene::bindCommonData() {
     glGenBuffers(1, &SHADOW_VBO);
     glBindVertexArray(SHADOW_VAO);
     glBindBuffer(GL_ARRAY_BUFFER, SHADOW_VBO);
-    glBufferData(GL_VERTEX_ARRAY, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GL_FLOAT),
                           (void *)0);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GL_FLOAT),
-                          (void *)(sizeof(GL_FLOAT)));
+                          (void *)(3 * sizeof(GL_FLOAT)));
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GL_FLOAT),
-                          (void *)(sizeof(GL_FLOAT)));
+                          (void *)(6 * sizeof(GL_FLOAT)));
     glBindVertexArray(0);
+
     glGenFramebuffers(1,&depthMapFBO);
     glGenTextures(1,&depthCubemap);
-    glBindTexture(GL_TEXTURE_CUBE_MAP,depthCubemap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubemap);
     for(int i = 0;i < 6;++i){
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i,0,GL_DEPTH_COMPONENT,SHADOW_WIDTH,SHADOW_HEIGHT,0,GL_DEPTH_COMPONENT,GL_FLOAT,NULL);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
     }
-    glBindFramebuffer(GL_FRAMEBUFFER,depthMapFBO);
-    glFramebufferTexture(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,depthCubemap,0);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthCubemap, 0);
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -103,13 +104,24 @@ void PointShaderScene::bindCommonData() {
 }
 
 void PointShaderScene::drawScene() {
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFrameFBO);
     glBindBuffer(GL_UNIFORM_BUFFER, m_uboMatrices);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), getViewMat().data());
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4),
                     getProjection().data());
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    m_pointShadowDepthModel->draw(m_pointShadowDepthShader);
 
-    m_pointShadowModel->draw(m_pointShadowShader);
+//    glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+//    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+//    glClear(GL_DEPTH_BUFFER_BIT);
+//    glBindVertexArray(SHADOW_VAO);
+//    m_pointShadowDepthModel->draw(m_pointShadowDepthShader);
+//    glBindVertexArray(0);
 
+//    glBindFramebuffer(GL_FRAMEBUFFER, defaultFrameFBO);
+    glViewport(0, 0, 2*screenWidth(), 2*screenHeight());
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindVertexArray(SHADOW_VAO);
+    m_pointShadowModel->draw(m_pointShadowShader, getViewPos(), depthCubemap);
+    glBindVertexArray(0);
 }

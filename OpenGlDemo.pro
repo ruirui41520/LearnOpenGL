@@ -11,6 +11,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        BaseScene.cpp \
         abstractframeprovider.cpp \
         basemodel.cpp \
         camerasurface.cpp \
@@ -82,6 +83,7 @@ HEADERS += \
     quadmesh.h \
     quadmodel.h \
     renderframeprovider.h \
+    res.h \
     shader.h \
     shadertransferutil.h \
     shadowmesh.h \
