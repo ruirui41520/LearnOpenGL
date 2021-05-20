@@ -17,7 +17,7 @@ void PointShadowMesh::initData(Shader *shader)
     }
     shader->bind();
     shader->setInt("diffuseTexture",0);
-//    shader->setInt("depthCube",1);
+    shader->setInt("depthCube",1);
     shader->release();
 }
 
@@ -30,8 +30,8 @@ void PointShadowMesh::drawWithVariab(Shader *shader, QVector3D eyePos, GLuint cu
     shader->setBool("useShadows", true);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,woodTextureId);
-//    glActiveTexture(GL_TEXTURE1);
-//    glBindTexture(GL_TEXTURE_CUBE_MAP, cubeId);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, cubeId);
     drawCube(shader);
     shader->release();
 }
@@ -40,7 +40,7 @@ void PointShadowMesh::drawCube(Shader *shader)
 {
     glEnable(GL_CULL_FACE);
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::scale(model, glm::vec3(5.0f));
+    model = glm::scale(model, glm::vec3(0.4f));
     shader->setMat4("model", model);
     glDrawArrays(GL_TRIANGLES,0,36);
 

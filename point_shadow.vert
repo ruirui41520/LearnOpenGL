@@ -14,12 +14,12 @@ out VS_OUT{
     vec2 TexCoords;
 } vs_out;
 
-uniform mat4 aModel;
+uniform mat4 model;
 
 void main()
 {
-    vs_out.FragPos = vec3(aModel * vec4(aPos, 1.0));
-    vs_out.Normal = transpose(inverse(mat3(aModel))) * aNormal;
+    vs_out.FragPos = vec3(model * vec4(aPos, 1.0));
+    vs_out.Normal = transpose(inverse(mat3(model))) * aNormal;
     vs_out.TexCoords = aTexture;
-    gl_Position = aProjection * aView * aModel * vec4(aPos,1.0);
+    gl_Position = aProjection * aView * model * vec4(aPos,1.0);
 }

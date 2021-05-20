@@ -111,14 +111,14 @@ void PointShaderScene::drawScene() {
                     getProjection().data());
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-//    glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-//    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-//    glClear(GL_DEPTH_BUFFER_BIT);
-//    glBindVertexArray(SHADOW_VAO);
-//    m_pointShadowDepthModel->draw(m_pointShadowDepthShader);
-//    glBindVertexArray(0);
+    glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glBindVertexArray(SHADOW_VAO);
+    m_pointShadowDepthModel->draw(m_pointShadowDepthShader);
+    glBindVertexArray(0);
 
-//    glBindFramebuffer(GL_FRAMEBUFFER, defaultFrameFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, defaultFrameFBO);
     glViewport(0, 0, 2*screenWidth(), 2*screenHeight());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glBindVertexArray(SHADOW_VAO);
